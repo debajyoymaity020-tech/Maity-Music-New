@@ -68,13 +68,33 @@ body{
 		background-color: rgba(0, 0, 0, 1.0);
 		padding: 25px 18px;
 	}
-	.logo{
+	 .logo{
 		color: #1ed760;
 		font-size: 27px;
 		margin-bottom: 35px;
 		margin-left: 10px;
-
+        animation: a 3s infinite;
 	}
+    @keyframes a{
+        0%{transform: translatey(0px);}
+        50%{transform: translateY(-20px);}
+        100%{transform: translateY(0px);}
+    }
+  .rotate {
+    display: inline-block;
+    animation: r 3s ease-in-out forwards;
+}
+
+@keyframes r {
+    0%, 100% {
+        transform: rotate(0deg);
+    }
+
+    50% {
+        transform: rotate(360deg);
+    }
+}
+   
     .s{
         font-size: 102px;
           text-shadow:
@@ -96,6 +116,7 @@ body{
         margin-bottom: 21px;
         
 	}
+
     
     .play-list a{
         display: block;
