@@ -250,6 +250,7 @@ body{
         margin-top: 8px;
         cursor: pointer;
         margin-left: 7%;
+        margin-right: 2%;
     }
     .my-profile:hover{
         color: black;
