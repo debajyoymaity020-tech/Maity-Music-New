@@ -916,6 +916,202 @@ form{
     }
 
 }
+/* ================================================= */
+/*   BOOK FLIP (Sign Up page)                        */
+/*   Eta tomar "Maity Music login.css" er EKDOM SHESHE */
+/*   (mobile media query er pore) paste koro          */
+/* ================================================= */
+
+/* checkbox ta lukano thakbe */
+.flip-toggle {
+    display: none;
+}
+
+/* ---------- Common (desktop + mobile) ---------- */
+
+.ggg {
+    cursor: pointer;
+}
+
+.back-link {
+    cursor: pointer;
+}
+
+/* Right side: under (sign up) ar leaf (login) ek-i jayegay stack hoy */
+.right {
+    position: relative;
+    display: grid;
+    width: 100%;
+    perspective: 2200px;
+}
+
+.right > .under,
+.right > .leaf {
+    grid-area: 1 / 1;
+}
+
+/* ---------- LEAF: je page ta ghurbe ---------- */
+
+.leaf {
+    position: relative;
+    z-index: 2;
+    transform-style: preserve-3d;
+    transform-origin: left center;       /* baam dik e hinge, book er moto */
+    transition: transform 1.1s cubic-bezier(0.645, 0.045, 0.355, 1);
+}
+
+.leaf-front {
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+}
+
+/* Leaf er pichon (ulte dile baam dike dekha jay) */
+.leaf-back {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    transform: rotateY(180deg);
+    -webkit-backface-visibility: hidden;
+    backface-visibility: hidden;
+
+    /* opaque background, jate niche er left page dekha na jay */
+    background:
+        radial-gradient(circle at 25% 20%, #043d26 0%, transparent 55%),
+        linear-gradient(135deg, #021711, #00100c 60%, #031c14);
+
+    /* spine er chhaya (right edge = hinge) */
+    box-shadow: inset -30px 0 40px -15px rgba(0, 0, 0, 0.75);
+}
+
+/* Sign Up click korle page ulte jabe */
+#flip:checked ~ .right .leaf {
+    transform: rotateY(-180deg);
+}
+
+/* ---------- UNDER: sign up page ---------- */
+
+.under {
+    position: relative;
+    z-index: 1;
+
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.5s 0.4s, visibility 0s 0.9s;
+}
+
+#flip:checked ~ .right .under {
+    opacity: 1;
+    visibility: visible;
+    transition: opacity 0.3s 0s, visibility 0s 0s;
+}
+
+/* page er baam edge e halka chhaya, jate gobhirota mone hoy */
+.under::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 40px;
+    background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
+    pointer-events: none;
+    z-index: 3;
+}
+
+/* Sign up form er chhoto kichu */
+.mar-sm {
+    margin-top: 5%;
+}
+
+.signup-btn {
+    border: none;
+    cursor: pointer;
+    font-family: inherit;
+}
+
+.su-msg {
+    min-height: 20px;
+    margin: 6px 0 0 8%;
+    font-size: 14px;
+    color: #00ff88;
+}
+
+.su-error {
+    color: #ff6b6b;
+}
+
+/* ---------- DESKTOP only ---------- */
+
+@media screen and (min-width: 969px) {
+
+    /* duto page ke thik 50/50 kore dao, jate hinge thik majhkhane thake */
+    .book > .box1 {
+        width: 50%;
+    }
+
+    .right {
+        width: 50%;
+    }
+
+    .leaf .box {
+        width: 100%;
+    }
+
+    .back-bar {
+        margin-left: 13%;
+    }
+}
+
+/* ---------- MOBILE: 3D flip bondho, shudhu swap hobe ---------- */
+
+@media screen and (max-width: 968px) {
+
+    .right {
+        display: block;
+        perspective: none;
+    }
+
+    .leaf {
+        transform: none !important;
+        transition: none;
+    }
+
+    .leaf-back {
+        display: none;
+    }
+
+    .under {
+        display: none;
+        opacity: 1;
+        visibility: visible;
+        transition: none;
+    }
+
+    .under::before {
+        display: none;
+    }
+
+    #flip:checked ~ .right .leaf {
+        display: none;
+    }
+
+    #flip:checked ~ .right .under {
+        display: block;
+    }
+
+    .su-msg {
+        text-align: center;
+        margin-left: 0;
+    }
+}
+
+/* jader device e animation kom rakhar setting ache */
+@media (prefers-reduced-motion: reduce) {
+    .leaf,
+    .under {
+        transition: none !important;
+    }
+}
 
 
 
