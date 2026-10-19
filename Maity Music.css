@@ -851,21 +851,51 @@ audio{
 .bit{
     align-items: flex-end;
     justify-content: space-between;
-    gap: 7px;
     height: 60px;
-    width: 130px;
+    width: 80px;
     margin-left: 2%;
     flex-shrink: 0;
     margin-bottom: 3%;
 }
 .bit .dot{
-    width: 10px;
+    width: 6px;
     height: 8px;
     border-radius: 10%;
     background: #1ed760;
     font-size: 0;            /* "." text lukiye dao, ekhon asol gol dot */
     box-shadow: 0 0 10px rgba(30, 215, 96, 0.55);
     will-change: transform;
+    animation: d 15s infinite;
+}
+	
+   @keyframes d {
+    0%   { background-color: #1ed71e;
+    box-shadow: 0 0 10px  #1ed71e;
+     }   /* neon green */
+    14%  { background-color: #00e5ff; 
+    box-shadow: 0 0 10px  #00e5ff;
+    }   /* cyan */
+    28%  { background-color: #3d8bff;
+    box-shadow: 0 0 10px  #3d8bff;
+     }   /* blue */
+    42%  { background-color: #b24dff; 
+    box-shadow: 0 0 10px  #b24dff;
+    }   /* purple */
+    49%  {background-color: rgb(195, 47, 47);
+    box-shadow: 0 0 10px  rgb(195, 47, 47);
+    }
+    57%  { background-color: #ff3df2; 
+    box-shadow: 0 0 10px  #ff3df2;
+    }   /* pink */
+    71%  { background-color: #ff9a3d; 
+    box-shadow: 0 0 10px  #ff9a3d;
+    }   /* orange */
+    85%  { background-color: #ffe83d; 
+    box-shadow: 0 0 10px  #ffe83d;
+    }   /* yellow */
+    100% { background-color: #1ed71e; 
+    box-shadow: 0 0 10px  #1ed71e;
+    }   /* back to green */
 }
 .min{
     font-size: 60px;
