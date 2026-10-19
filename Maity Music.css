@@ -522,6 +522,10 @@ body{
     cursor: pointer;
     display:none;
 }
+ .play2{
+    text-decoration: none;
+    color: black;
+}
 .play1:active{
     zoom: 85%;
 }
