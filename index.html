@@ -141,37 +141,61 @@
         </div>
     </main>
 
-    <script>
-        // Sign up form: password match check, tarpor abar login page e fire jabe
-        const flip = document.getElementById('flip');
-        const signupForm = document.getElementById('signup-form');
-        const msg = document.getElementById('su-msg');
+   <script>
+    const flip = document.getElementById('flip');
+    const signupForm = document.getElementById('signup-form');
+    const msg = document.getElementById('su-msg');
 
-        signupForm.addEventListener('submit', function (e) {
-            e.preventDefault();
-            const p1 = document.getElementById('su-password').value;
-            const p2 = document.getElementById('su-password2').value;
+    signupForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        const p1 = document.getElementById('su-password').value;
+        const p2 = document.getElementById('su-password2').value;
 
-            if (p1 !== p2) {
-                msg.textContent = 'Passwords do not match.';
-                msg.className = 'su-msg su-error';
-                return;
-            }
+        if (p1 !== p2) {
+            msg.textContent = 'Passwords do not match.';
+            msg.className = 'su-msg su-error';
+            return;
+        }
 
-            msg.textContent = 'Account created! Taking you to login...';
-            msg.className = 'su-msg';
-            setTimeout(function () {
-                flip.checked = false;      // page ulte login e fire jao
-                signupForm.reset();
-                msg.textContent = '';
-            }, 1200);
-        });
+        // NEW: nam ar email save kore rakho
+        const fullName = document.getElementById('su-name').value.trim();
+        const suEmail = document.getElementById('su-email').value.trim().toLowerCase();
+        let users = {};
+        try { users = JSON.parse(localStorage.getItem('maityUsers')) || {}; } catch (err) {}
+        users[suEmail] = fullName;
+        localStorage.setItem('maityUsers', JSON.stringify(users));
 
-        // Back/Login e fire gele purono message muche felo
-        flip.addEventListener('change', function () {
-            if (!flip.checked) msg.textContent = '';
-        });
-    </script>
+        msg.textContent = 'Account created! Taking you to login...';
+        msg.className = 'su-msg';
+        setTimeout(function () {
+            flip.checked = false;
+            signupForm.reset();
+            msg.textContent = '';
+        }, 1200);
+    });
+
+    flip.addEventListener('change', function () {
+        if (!flip.checked) msg.textContent = '';
+    });
+
+    // NEW: Log In button click
+    const loginBtn = document.getElementById('login-btn');
+    loginBtn.addEventListener('click', function (e) {
+        e.preventDefault();   // age nam save hobe, tarpor page jabe
+        const email = document.getElementById('email').value.trim().toLowerCase();
+        let users = {};
+        try { users = JSON.parse(localStorage.getItem('maityUsers')) || {}; } catch (err) {}
+
+       let name = users[email];
+if (!name) name = email ? email.split('@')[0] : 'Guest';
+
+// NEW: shudhu prothom nam rakho (poddhoti bad)
+name = name.trim().split(' ')[0];
+
+localStorage.setItem('maityCurrentUser', name);
+        window.location.href = 'Maity Music.html';
+    });
+</script>
 </body>
 
 </html>

@@ -366,3 +366,15 @@ audio.addEventListener('loadedmetadata', updatePipTime);
   }
   requestAnimationFrame(frame);
 })();
+document.addEventListener('DOMContentLoaded', function () {
+    let name = 'User';
+    try { name = localStorage.getItem('maityCurrentUser') || 'User'; } catch (e) {}
+
+    document.getElementById('name').textContent = name + ' 👋';
+    document.querySelector('.pm-name').textContent = name;
+
+    // Logout korle nam muche felo
+    document.querySelector('.pm-logout').addEventListener('click', function () {
+        localStorage.removeItem('maityCurrentUser');
+    });
+});
