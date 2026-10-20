@@ -1137,6 +1137,7 @@ body.has-canvas main{ margin-right: 300px; }
     color: white;
     font-size: 18px;
     padding: 5px;
+    display: none;
     }
 
     .my-profile {
