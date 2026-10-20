@@ -64,10 +64,14 @@
                         <div class="input">
                             <span>🔒</span>
                             <input class="inp" type="password" placeholder="Create Password" id="su-password" autocomplete="new-password" required>
+                            <!-- NEW: chokh icon -->
+                            <button type="button" class="eye-btn" data-target="su-password" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
                         </div>
                         <div class="input">
                             <span>🔒</span>
                             <input class="inp" type="password" placeholder="Confirm Password" id="su-password2" autocomplete="new-password" required>
+                            <!-- NEW: chokh icon -->
+                            <button type="button" class="eye-btn" data-target="su-password2" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
                         </div>
                         <div class="su-msg" id="su-msg"></div>
                         <div class="mar mar-sm"></div>
@@ -106,8 +110,11 @@
                                 <div class="input">
                                     <span>🔒</span>
                                     <input class="inp" type="password" placeholder="Enter Password" id="password">
+                                    <!-- NEW: chokh icon -->
+                                    <button type="button" class="eye-btn" data-target="password" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
                                 </div>
-                                <div class="mar"></div>
+                                <!-- NEW: error message ei .mar er bhitore (layout nore na) -->
+                                <div class="mar"><div class="login-msg" id="login-msg"></div></div>
                                 <a class="login" href="Maity Music.html" id="login-btn">Log In</a>
                             </form>
 
@@ -141,11 +148,40 @@
         </div>
     </main>
 
-   <script>
+<script>
     const flip = document.getElementById('flip');
     const signupForm = document.getElementById('signup-form');
     const msg = document.getElementById('su-msg');
+    const loginMsg = document.getElementById('login-msg');
 
+    // users ke localStorage theke pore ney
+    function getUsers() {
+        try { return JSON.parse(localStorage.getItem('maityUsers')) || {}; }
+        catch (err) { return {}; }
+    }
+
+    // NEW: chokh icon click korle password dekhabe / lukabe
+    function resetEyes() {
+        document.querySelectorAll('.eye-btn').forEach(function (btn) {
+            document.getElementById(btn.dataset.target).type = 'password';
+            btn.querySelector('i').className = 'fa-solid fa-eye';
+        });
+    }
+    document.querySelectorAll('.eye-btn').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+            const input = document.getElementById(btn.dataset.target);
+            const icon = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';                       // password dekha jabe
+                icon.className = 'fa-solid fa-eye-slash';
+            } else {
+                input.type = 'password';                   // abar dot dot dot
+                icon.className = 'fa-solid fa-eye';
+            }
+        });
+    });
+
+    // ---------- SIGN UP ----------
     signupForm.addEventListener('submit', function (e) {
         e.preventDefault();
         const p1 = document.getElementById('su-password').value;
@@ -157,12 +193,19 @@
             return;
         }
 
-        // NEW: nam ar email save kore rakho
         const fullName = document.getElementById('su-name').value.trim();
         const suEmail = document.getElementById('su-email').value.trim().toLowerCase();
-        let users = {};
-        try { users = JSON.parse(localStorage.getItem('maityUsers')) || {}; } catch (err) {}
-        users[suEmail] = fullName;
+        const users = getUsers();
+
+        // NEW: ek-i email e duibar sign up atkano
+        if (users[suEmail] && typeof users[suEmail] === 'object') {
+            msg.textContent = 'This email is already registered. Please log in.';
+            msg.className = 'su-msg su-error';
+            return;
+        }
+
+        // NEW: ekhon nam + password dutoi save hocche
+        users[suEmail] = { name: fullName, password: p1 };
         localStorage.setItem('maityUsers', JSON.stringify(users));
 
         msg.textContent = 'Account created! Taking you to login...';
@@ -170,30 +213,66 @@
         setTimeout(function () {
             flip.checked = false;
             signupForm.reset();
+            resetEyes();
             msg.textContent = '';
         }, 1200);
     });
 
     flip.addEventListener('change', function () {
         if (!flip.checked) msg.textContent = '';
+        loginMsg.textContent = '';
     });
 
-    // NEW: Log In button click
+    // ---------- LOG IN ----------
     const loginBtn = document.getElementById('login-btn');
+
     loginBtn.addEventListener('click', function (e) {
-        e.preventDefault();   // age nam save hobe, tarpor page jabe
+        e.preventDefault();   // age check hobe, tarpor page jabe
+        loginMsg.textContent = '';
+
         const email = document.getElementById('email').value.trim().toLowerCase();
-        let users = {};
-        try { users = JSON.parse(localStorage.getItem('maityUsers')) || {}; } catch (err) {}
+        const password = document.getElementById('password').value;
 
-       let name = users[email];
-if (!name) name = email ? email.split('@')[0] : 'Guest';
+        if (!email || !password) {
+            loginMsg.textContent = 'Please enter email & password 😊';
+            return;
+        }
 
-// NEW: shudhu prothom nam rakho (poddhoti bad)
-name = name.trim().split(' ')[0];
+        const users = getUsers();
+        const user = users[email];
 
-localStorage.setItem('maityCurrentUser', name);
+        // NEW: register kora ache kina check
+        if (!user) {
+            loginMsg.textContent = 'Oops! Not registered yet 🎧 Sign Up first!';
+            return;
+        }
+        // purono account (shudhu nam save chilo, password chilo na)
+        if (typeof user === 'string') {
+           loginMsg.textContent = 'Welcome back 💚 Please Sign Up once again.';
+            return;
+        }
+        // NEW: password mile kina check
+        if (user.password !== password) {
+           loginMsg.textContent = 'Oops! Wrong password 🔒 Try again.';
+            return;
+        }
+
+        // shob thik: shudhu prothom nam rakho (poddhoti bad)
+        let name = (user.name || '').trim().split(' ')[0];
+        if (!name) name = email.split('@')[0];
+
+        localStorage.setItem('maityCurrentUser', name);
         window.location.href = 'Maity Music.html';
+    });
+
+    // NEW: Enter chaple-o login hobe
+    ['email', 'password'].forEach(function (id) {
+        document.getElementById(id).addEventListener('keydown', function (e) {
+            if (e.key === 'Enter') loginBtn.click();
+        });
+        document.getElementById(id).addEventListener('input', function () {
+            loginMsg.textContent = '';
+        });
     });
 </script>
 </body>

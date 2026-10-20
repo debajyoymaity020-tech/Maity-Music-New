@@ -1113,6 +1113,38 @@ form{
     }
 }
 
+/* NEW: password chokh icon */
+.eye-btn{
+    background: none;
+    border: none;
+    color: #d7d7d7;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 0;
+    flex-shrink: 0;
+}
+.eye-btn:hover{
+    color: #14e878;
+}
+
+/* NEW: login error message (layout nore na) */
+.mar{
+    position: relative;
+}
+.login-msg{
+    position: absolute;
+    left: 8%;
+    bottom: 15px;
+    font-size: 14px;
+    color: #ff6b6b;
+}
+@media screen and (max-width: 968px) {
+    .login-msg{
+        left: 0;
+        width: 100%;
+        text-align: center;
+    }
+}
 
 
 
