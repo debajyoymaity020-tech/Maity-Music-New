@@ -810,7 +810,7 @@ audio{
     color: #999;
     cursor: pointer;
     padding: 6px;
-    margin-left: 4%;
+    margin-left: 1%;
     border-radius: 50%;
     flex-shrink: 0;
     display: flex;
@@ -824,7 +824,7 @@ audio{
     color: #999;
     cursor: pointer;
     padding: 6px;
-    margin-left: 1%;
+    margin-left: 2%;
     border-radius: 50%;
     flex-shrink: 0;
     display: flex;
