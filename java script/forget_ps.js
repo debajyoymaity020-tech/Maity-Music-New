@@ -1,0 +1,228 @@
+ const message = document.getElementById('message');
+        const form = document.getElementById('fp-form');
+        const idInput = document.getElementById('fp-id');
+        const otpInput = document.getElementById('fp-otp');
+        const newPass = document.getElementById('fp-new');
+        const confPass = document.getElementById('fp-confirm');
+        const sendBtn = document.getElementById('opt-btn');
+        const verifyBtn = document.getElementById('av');
+        const resetBtn = document.getElementById('rp');
+
+        // Enter chaple form reload hobe na
+        form.addEventListener('submit', function (e) { e.preventDefault(); });
+
+        // ---------- message dekhano ----------
+        let msgTimer = null;
+        function showMsg(text, ms) {
+            clearTimeout(msgTimer);
+            message.innerText = text;
+            message.style.display = 'block';
+            msgTimer = setTimeout(function () { message.style.display = 'none'; }, ms || 2500);
+        }
+
+        // ---------- register kora users (login page er sathe ek-i jinish) ----------
+        function getUsers() {
+            try { return JSON.parse(localStorage.getItem('maityUsers')) || {}; }
+            catch (err) { return {}; }
+        }
+
+        // ---------- Gmail ba Phone ----------
+        function isGmail(v) { return /^[a-z0-9._%+-]+@gmail\.com$/i.test(v); }
+        function parseId(raw) {
+            const v = (raw || '').trim();
+            if (isGmail(v)) return { type: 'email', key: v.toLowerCase() };
+            const compact = v.replace(/[\s\-()]/g, '');
+            const m = compact.match(/^(?:\+?91|0)?([6-9]\d{9})$/);
+            if (m) return { type: 'phone', key: m[1] };
+            return null;
+        }
+
+        // ---------- OTP SETTINGS ----------
+        // Login page e je 3ta value bosiyecho, ekhaneo EKDOM SEI 3ta-i bosao.
+        // Na bosale DEMO mode: OTP screen e-i dekhabe (email jabe na).
+        const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+        const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+        const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+        const DEMO_MODE = EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY';
+
+        // Phone e asol SMS pathate SMS service lagbe. Connect korle SMS_ENABLED = true koro.
+        const SMS_ENABLED = false;
+        function sendSmsOtp(phone, code) {
+            // tomar SMS service / server er code ekhane boshbe
+            return Promise.reject(new Error('SMS service not connected'));
+        }
+
+        const OTP_VALID_MS = 5 * 60 * 1000;   // OTP 5 minute valid
+        const RESEND_SECONDS = 30;            // abar pathate 30 second opekkha
+        const MAX_TRIES = 5;                  // 5 bar bhul dile notun OTP lagbe
+
+        if (!DEMO_MODE && typeof emailjs !== 'undefined') {
+            emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+        }
+
+        let otpState = { code: null, id: null, expires: 0, tries: 0, verified: false };
+        let resendTimer = null;
+
+        function makeOtp() {
+            const a = new Uint32Array(1);
+            crypto.getRandomValues(a);
+            return String(a[0] % 1000000).padStart(6, '0');
+        }
+
+        function startResendCountdown() {
+            let left = RESEND_SECONDS;
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Wait ' + left + 's';
+            clearInterval(resendTimer);
+            resendTimer = setInterval(function () {
+                left--;
+                if (left <= 0) {
+                    clearInterval(resendTimer);
+                    sendBtn.disabled = false;
+                    sendBtn.textContent = 'Resend';
+                } else {
+                    sendBtn.textContent = 'Wait ' + left + 's';
+                }
+            }, 1000);
+        }
+
+        function resetOtpState() {
+            clearInterval(resendTimer);
+            sendBtn.disabled = false;
+            sendBtn.textContent = 'Send OTP';
+            otpState = { code: null, id: null, expires: 0, tries: 0, verified: false };
+            otpInput.value = '';
+        }
+
+        // OTP box e shudhu number
+        otpInput.addEventListener('input', function () {
+            otpInput.value = otpInput.value.replace(/\D/g, '');
+        });
+
+        // Gmail / phone bodlale purono OTP bathil
+        idInput.addEventListener('input', function () {
+            if (!otpState.id) return;
+            const p = parseId(idInput.value);
+            if (!p || p.key !== otpState.id) resetOtpState();
+        });
+
+        // ---------- 1) SEND OTP ----------
+        sendBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const idInfo = parseId(idInput.value);
+            if (!idInfo) {
+                showMsg('Please enter a valid Gmail or 10-digit phone number 📱', 3000);
+                return;
+            }
+
+            // shudhu register kora account er password reset hobe
+            const user = getUsers()[idInfo.key];
+            if (!user) {
+                showMsg('Not registered yet 🎧 Please Sign Up first.', 3000);
+                return;
+            }
+            const userName = (typeof user === 'string' ? user : (user.name || '')).trim().split(' ')[0];
+
+            const code = makeOtp();
+            const where = idInfo.type === 'email' ? idInfo.key : '+91 ' + idInfo.key;
+            sendBtn.disabled = true;
+            sendBtn.textContent = 'Sending...';
+
+            function onSent() {
+                otpState = { code: code, id: idInfo.key, expires: Date.now() + OTP_VALID_MS, tries: 0, verified: false };
+                startResendCountdown();
+            }
+            function onFail() {
+                sendBtn.disabled = false;
+                sendBtn.textContent = 'Send OTP';
+                showMsg("Couldn't send OTP 😢 Please try again.", 3000);
+            }
+
+            const demo = idInfo.type === 'email' ? DEMO_MODE : !SMS_ENABLED;
+            if (demo) {
+                onSent();
+                showMsg('DEMO mode: your OTP is ' + code + ' 🔑', 8000);
+                return;
+            }
+
+            let job;
+            if (idInfo.type === 'email') {
+                if (typeof emailjs === 'undefined') { onFail(); return; }
+                job = emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    to_email: idInfo.key,
+                    to_name: userName || 'Music Lover',
+                    otp: code
+                });
+            } else {
+                job = sendSmsOtp(idInfo.key, code);
+            }
+            job.then(function () {
+                onSent();
+                showMsg('OTP sent to ' + where + ' ✅', 3500);
+            }, onFail);
+        });
+
+        // ---------- 2) VERIFY OTP ----------
+        verifyBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const idInfo = parseId(idInput.value);
+            if (!idInfo || !otpState.code || otpState.id !== idInfo.key) {
+                showMsg('Please tap Send OTP first 📩', 3000);
+                return;
+            }
+            if (Date.now() > otpState.expires) {
+                otpState.code = null;
+                showMsg('OTP expired ⏰ Please send a new one.', 3000);
+                return;
+            }
+            if (otpInput.value.trim() !== otpState.code) {
+                otpState.tries++;
+                if (otpState.tries >= MAX_TRIES) {
+                    otpState.code = null;
+                    showMsg('Too many wrong tries 🚫 Please send a new OTP.', 3000);
+                } else {
+                    showMsg('Wrong OTP 🔑 Please try again.', 2500);
+                    message.style.backgroundColor="red";
+                }
+                return;
+            }
+            otpState.verified = true;
+            showMsg('Account verified successfully ✅', 2500);
+                    message.style.backgroundColor="lightgreen";
+
+        });
+
+        // ---------- 3) RESET PASSWORD ----------
+        resetBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            const idInfo = parseId(idInput.value);
+            if (!idInfo || !otpState.verified || otpState.id !== idInfo.key) {
+                showMsg('Please verify your OTP first 🔑', 3000);
+                return;
+            }
+            const p1 = newPass.value;
+            const p2 = confPass.value;
+            if (!p1) {
+                showMsg('Please enter a new password 🔒', 3000);
+                return;
+            }
+            if (p1 !== p2) {
+                showMsg("Oops! Passwords don't match 🔒 Try again.", 3000);
+                    message.style.backgroundColor="red";
+                return;
+            }
+
+            // register kora account er password bodle felo
+            const users = getUsers();
+            const user = users[idInfo.key];
+            const name = typeof user === 'string' ? user : ((user && user.name) || '');
+            users[idInfo.key] = { name: name, password: p1 };
+            localStorage.setItem('maityUsers', JSON.stringify(users));
+            resetOtpState();
+
+            showMsg('Password reset successful ✅', 1400);
+                    message.style.backgroundColor="lightgreen";
+            setTimeout(function () {
+                window.location.href = 'index.html';
+            }, 1400);
+        });
