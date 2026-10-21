@@ -8,1169 +8,141 @@
     <link rel="apple-touch-icon" href="images/M-icon-512.png">
     <link rel="icon" type="image/png" href="images/M-icon-512.png">
     <title>Maity Music Login</title>
+    <!-- OTP email pathanor jonno (EmailJS) -->
+    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
+
+    <!-- Shudhu notun CSS (baki shob CSS/Maity Music login.css e ache) -->
+    <style>
+        /* tomar original gradient background + niche scroll korte parbe */
+        body{
+            min-height: 100vh;
+            /* background:
+                radial-gradient(circle at 15% 20%, #043d26 0%, transparent 30%),
+                radial-gradient(circle at 90% 10%, #075a31 0%, transparent 35%),
+                linear-gradient(135deg, #021711, #00100c 60%, #031c14); */
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            overflow: visible;
+            overflow-x: hidden;
+            background-color: black;
+        }
+
+        /* password chokh icon */
+        .eye-btn{
+            background: none;
+            border: none;
+            color: #d7d7d7;
+            cursor: pointer;
+            font-size: 18px;
+            padding: 0;
+            flex-shrink: 0;
+        }
+        .eye-btn:hover{
+            color: #14e878;
+        }
+
+        /* login message (layout nore na) */
+        .mar{
+            position: relative;
+        }
+        .login-msg{
+            position: absolute;
+            left: 8%;
+            bottom: 20px;
+            max-width: 52%;
+            font-size: 13px;
+            line-height: 1.3;
+            color: #ff6b6b;
+        }
+        @media screen and (max-width: 968px) {
+            .login-msg{
+                left: 0;
+                width: 100%;
+                max-width: 100%;
+                bottom: 5px;
+                text-align: center;
+            }
+        }
+
+        /* ===== Desktop size adjust ===== */
+        @media screen and (min-width: 969px) {
+            /* login: Log In button ektu niche, Forget Password jaygay-i thakbe */
+            .leaf .mar{ margin-top: calc(10% + 16px); }
+            .fp{ top: calc(68.4% - 11px); }
+
+            /* sign up panel ektu compact, jate screen e dhore */
+            .under .input{ height: 56px; margin-top: 2.2%; margin-bottom: 12px; }
+            .under .mar-sm{ margin-top: 2%; }
+            .under .dass{ margin-top: 5%; }
+            .under .su{ margin-top: 3%; }
+        }
+
+        /* ===== sweet message animations ===== */
+        @keyframes msgPop {
+            from { opacity: 0; transform: translateY(12px) scale(0.9); }
+            to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        @keyframes msgShake {
+            0%, 100% { transform: translateX(0); }
+            20% { transform: translateX(-8px); }
+            40% { transform: translateX(8px); }
+            60% { transform: translateX(-5px); }
+            80% { transform: translateX(5px); }
+        }
+        @keyframes msgGlow {
+            0%, 100% { text-shadow: 0 0 6px rgba(0, 255, 136, 0.4); }
+            50%      { text-shadow: 0 0 16px rgba(0, 255, 136, 0.95); }
+        }
+
+        /* Login page message */
+        .login-msg.error{
+            color: #ff6b6b;
+            animation: msgPop 0.35s ease-out, msgShake 0.5s 0.1s;
+        }
+        .login-msg.success{
+            color: #00ff88;
+            font-weight: bold;
+            animation: msgPop 0.4s ease-out, msgGlow 1.2s ease-in-out infinite;
+        }
+
+        /* Sign up page message */
+        .su-msg.shake{
+            animation: msgPop 0.35s ease-out, msgShake 0.5s 0.1s;
+        }
+        .su-msg.glow{
+            font-weight: bold;
+            animation: msgPop 0.4s ease-out, msgGlow 1.2s ease-in-out infinite;
+        }
+
+        /* jader device e animation kom rakhar setting ache */
+        @media (prefers-reduced-motion: reduce) {
+            .login-msg, .su-msg { animation: none !important; }
+        }
+
+        /* ===== Send OTP button ===== */
+        .otp-btn{
+            background: #00ff88;
+            color: #000;
+            border: none;
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-size: 13px;
+            font-weight: bold;
+            cursor: pointer;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+        .otp-btn:hover:not(:disabled){
+            background: #185d60;
+            color: #1ed760;
+        }
+        .otp-btn:disabled{
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+    </style>
 </head>
-<style>
-    body{
-        background-color: #043d26;
-    min-height: 100vh;
-    /* background:
-        radial-gradient(circle at 15% 20%, #043d26 0%, transparent 30%),
-        radial-gradient(circle at 90% 10%, #075a31 0%, transparent 35%),
-        linear-gradient(135deg, #021711, #00100c 60%, #031c14); */
-    overflow-x: hidden;
-    font-family: Arial, Helvetica, sans-serif;
-    color: white;
-}
-main{
-    display: flex;
-    /* align-items: center; */
-    justify-content: space-between;
-}
-.box1{
-    /* height:900.7px; */
-    width: 49%;
-    /* border: 1px solid red; */
-    position: relative;
-}
-.partition{
-    height: 100px;
-    width: 2px;
-    /* border: 0.1px solid #1ed760; */
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15, 77, 53, 0.55),
-            rgba(1, 22, 17, 0.8)
-        );
-     box-shadow:
-        0 0 10px rgba(0, 295, 136, 0.6),
-        0 0 25px rgba(0, 295, 136, 0.25),
-        inset 0 0 20px rgba(0, 295, 136, 0.08);
-}
-.box{
-    /* height: 788.7px; */
-    width: 49%;
-    /* border: 1px solid red; */
-    position: relative;
-}
-.logo{
-		color: #1ed760;
-		font-size: 31px;
-		/* margin-bottom: 35px; */
-        margin-top: 20px;
-        margin-left: 110px;
-	}
-    .s{
-        font-size: 72px;
-          text-shadow:
-        0 0 10px #14e878,
-        0 0 25px #14e878;
-    }
-    .wb{
-		color: #1ed760;
-        font-size: 19px;
-        margin-left:110px;
-        margin-top: 10px;
-    }
-    .gd{
-        font-size: 69px;
-        margin-left: 100px;
-        font-family: "Brush Script MT", cursive;
-        font-family: cursive;
-    font-weight: 500;
-    }
-    .green:hover{
-        color: #74dd3f;
-        cursor: pointer;
-        transition: all ease-in-out 0.3s;
-
-    }
-    .aga{
-		color: #1ed760;
-        font-size: 65px;
-        margin-left: 100px;
-    }
-    .yf{
-        font-size: 20px;
-         color: #bdbdbd;
-         margin-left: 100px;
-         font-family: Tahoma, sans-serif;
-         margin-top: 20px;
-
-    }
-    .yf1{
-        font-size: 20px;
-         color: #bdbdbd;
-         margin-left: 100px;
-         font-family: Tahoma, sans-serif;
-         margin-top: 7px;
-    }
-    .wave {
-    position: absolute;
-
-    width: 520px;
-    height: 120px;
-
-    border: 2px solid #0ee977;
-
-    border-color: #0ee977 transparent transparent transparent;
-
-    border-radius: 50%;
-}
-
-.wave1 {
-    left: -2px;
-    top: 490px;
-    transform: rotate(18deg);
-}
-
-.wave2 {
-    left: 20px;
-    top: 505px;
-
-    transform: rotate(18deg);
-}
-
-.wave3 {
-    left: 50px;
-    top: 515px;
-    transform: rotate(18deg);
-}
-.music-note {
-    position: absolute;
-
-    color: #15f18a;
-
-    font-size: 55px;
-
-    text-shadow:
-        0 0 10px #14e878,
-        0 0 25px #14e878;
-}
-
-.note1 {
-    left: 50%;
-    cursor: pointer;
-    top: 48%;
-}
-
-.note2 {
-    left: 87%;
-    top: 85%;
-    cursor: pointer;
-
-    font-size: 45px;
-}
-
-.note3 {
-    left: 3%;
-    bottom: 10%;
-    cursor: pointer;
-
-    font-size: 60px;
-}
-
-.note4 {
-    right: 8%;
-    top: 26.9%;
-    cursor: pointer;
-
-    font-size: 40px;
-}
-.note1:hover,
-.note2:hover,
-.note3:hover,
-.note4:hover{
-    transform: scale(1.07);
-    transition: all ease-in-out 0.3s;
-}
-.headphone {
-    position: absolute;
-
-    left: 140px;
-    top: 489px;
-
-    font-size: 240px;
-
-    filter:
-        drop-shadow(0 0 10px #00ff88)
-        drop-shadow(0 0 35px #00a85a);
-
-    transform: rotate(-8deg);
-}
-.music-star {
-    position: absolute;
-
-    color: #15f18a;
-
-    font-size: 55px;
-
-    text-shadow:
-        0 0 10px #14e878,
-        0 0 25px #14e878;
-}
-.star1 {
-    left: 84%;
-    top: 59%;
-    cursor: pointer;
-}
-.star2{
-    top: 34.5%;
-    left: 58%;
-    cursor: pointer;
-}
-.star2:hover, 
-.star3:hover,
-.star1:hover{
-    color: rgb(208, 227, 179);
-    transition: all ease-in-out 0.3s;
-    transform: translatey(-9px);
-}
-.star3{
-    top: 3%;
-    left: 79%;
-    cursor: pointer;
-}
-.top-bar{
-    margin-top: 30px;
-    color: #bdbdbd;
-    margin-left: 56%;
-    font-size: 15px;
-    /* margin-bottom: 5%; */
-
-}
-.tm{
-    margin-left: 10px;
-}
-.tm1{
-     margin-left: 10px;
-}
-.tm:hover{
-    color: #15f18a;
-    text-shadow:
-        0 0 10px #14e878,
-        0 0 25px #14e878;
-        cursor: pointer;
-        transition: all ease-in-out 0.2s;
-}
-.lpb{
-  height: auto;
-  width: 70%; 
-  border: 2px solid #14e878; 
-  margin-top: 2%;
-  border-radius: 26px;
-  margin-left: 13%;
-  align-items: center;
-  position: relative;
-    background:
-        linear-gradient(
-            145deg,
-            rgba(15, 77, 53, 0.55),
-            rgba(1, 22, 17, 0.8)
-        );
-     box-shadow:
-        0 0 10px rgba(0, 295, 136, 0.6),
-        0 0 25px rgba(0, 295, 136, 0.25),
-        inset 0 0 20px rgba(0, 295, 136, 0.08);
-
-}
-.lpb:hover{
-    /* border: 1px solid red; */
-     transform: scale(1.013);
-    transition: all ease-in-out 0.4s;
-}
-
-.wh{
-    color: white;
-     text-shadow:
-        0 0 10px #14e878,
-        0 0 25px #14e878;
-}
-.s1{
-    font-size: 72px;
-}
-.lis{
-    color: #bdbdbd;
-    font-size: 19px;
-    margin-left: 21%;
-        font-family: cursive;
-}
-.ima{
-    height: 140px;
-    width: 140px;
-    border-radius: 50%;
-    border: 2px solid slategrey;
-    margin-top: 3%;
-    margin-left: 34%;
-    box-shadow:
-        0 0 10px rgba(0, 295, 136, 0.6),
-        0 0 25px rgba(0, 295, 136, 0.25),
-        inset 0 0 20px rgba(0, 295, 136, 0.08);
-    
-}
-.pho{
-    height: 140px;
-    width: 140px;
-}
-img{
-    height: 100%;
-    width: 100%;
-    border-radius: 50%;
-}
-form{
-    /* border: 1px solid red; */
-    height: auto;
-}
-.input{
-      height: 66px;
-    /* width: 10px; */
-    display: flex;
-    align-items: center;
-
-    gap: 15px;
-
-    padding: 0 20px;
-
-    margin-bottom: 18px;
-
-    border: 1px solid #185d60;
-
-    border-radius: 15px;
-
-    background: rgba(0, 20, 25, 0.7);
-
-    transition: 0.3s;
-    width: 75%;
-    margin-left: 8%;
-    margin-top: 3.8%;
-}
-.input:hover{
-     border-color: #14e878;
-    box-shadow: 0 0 12px rgba(20, 232, 120, 0.15);
-    
-}
-.input > span{
-     font-size: 22px;
-    color: #d7d7d7;
-}
-.input input{
-     flex: 1;
-
-    border: none;
-    outline: none;
-
-    background: transparent;
-
-    color: white;
-
-    font-size: 17px;
-}
-.input-box input::placeholder {
-    color: #a6a6a6;
-}
-.login{
-    font-size: 23px;
-    color: black;
-    text-decoration: none;
-    padding-top: 11px;
-    padding-bottom: 11px;
-    padding-left: 21px;
-    padding-right: 21px;
-    background-color: #00ff88;
-    border-radius: 16px;
-    /* margin-top: 120%; */
-    margin-left: 36%;
-}
-.login:hover{
-    background-color:#185d60;
-    color: #1ed760;
-    transition: all ease-in-out 0.2s;
-     box-shadow:
-        /* 0 0 10px rgba(0, 295, 136, 0.90), */
-        0 0 25px rgba(0, 295, 136, 0.25),
-        inset 0 0 20px rgba(0, 295, 136, 0.08);
-}
-.mar{
-    margin-top: 10%;
-}
-.dass{
-    width: 70%;
-    border: 0.7px solid;
-    color: #b1b0b0;
-    margin-top: 7%;
-    margin-left: 14%;
-
-}
-.social{
-    /* height: 8vh; */
-    width: 55%;
-    /* border: 1px solid yellow; */
-    display: flex;
-    align-items: center;
-    margin-top: 2%;
-    justify-content: space-evenly;
-    margin-left: 19%;
-}
-.fa-google{
-    color: white;
-    font-size: 30px;
-    padding: 14px;
-    border: 1px solid #00ff88;
-    border-radius: 30%;
-}
-.fa-google:hover{
-     color:deepskyblue;
-    background-color: white;
-    border: 1px solid white;
-    transition: all ease-in-out 0.5s;
-}
-.fa-apple{
-   
-    color: white;
-    font-size: 32px;
-    padding: 16px;
-    border-radius: 30%;
-    border: 1px solid #00ff88;
-}
-.fa-apple:hover{
-    color: black;
-    background-color: white;
-    border: 1px solid white;
-    transition: all ease-in-out 0.5s;
-}
-.fa-facebook-f{
-     color: white;
-    font-size: 32px;
-    padding-top: 14px;
-    padding-bottom: 14px;
-    padding-left: 16px;
-    padding-right: 16px;
-    border-radius: 30%;
-    border: 1px solid #00ff88;
-}
-.fa-facebook-f:hover{
-     color: blue;
-    background-color: white;
-    border: 1px solid white;
-    transition: all ease-in-out 0.5s;
-}
-.fp{
-    position: absolute;
-    top: 68.4%;
-    left: 64.1%;
-    color: #00ff88;
-    text-decoration: none;
-}
-.su{
-    margin-top: 4%;
-    color: #b1b0b0;
-    margin-left: 24%;
-    font-size: 15px;
-    margin-bottom: 3%;
-}
-.gre{
-    color: #00ff88;
-    cursor: pointer;
-    
-}
-.star4 {
-    left: 70%;
-    top: 36%;
-    cursor: pointer;
-}
-.star5{
-    top: 29.5%;
-    left: 18%;
-    cursor: pointer;
-}
-.star4:hover,
-.star5:hover{
-    color: rgb(208, 227, 179);
-    transition: all ease-in-out 0.2s;
-}
-.line{
-    position: absolute;
-    border: 1px solid #1ed760;
-     text-shadow:
-        0 0 10px #14e878,
-        0 0 25px #14e878;
-}
-.line1{
-    height: 19.8vh;
-    top: 11.5%;
-    left: 21.7%;
-}
-.line2{
-    height: 25.9vh;
-    top: 11.5%;
-    left: 73.72%;
-}
-.ggg{
-    color: #1ed760;
-    text-decoration:none;
-}
-
-
-
-
-
-
-/* CHATGPT USE TO MEDIA QUARY FOR PHONE */
-
-/* ================================= */
-/*        MOBILE RESPONSIVE           */
-/* ================================= */
-
-@media screen and (max-width: 968px) {
-
-    * {
-        box-sizing: border-box;
-    }
-
-    body {
-        min-height: 100vh;
-        width: 100%;
-        overflow-x: hidden;
-        overflow-y: auto;
-    }
-
-    main {
-        width: 100%;
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-    }
-
-
-    /* ============================== */
-    /*          LEFT SECTION           */
-    /* ============================== */
-
-    .box1 {
-        width: 100%;
-        height: auto;
-        min-height: 470px;
-        padding: 20px 15px;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .box1 .logo {
-        margin: 10px 0 0 0;
-        text-align: center;
-        font-size: 27px;
-    }
-
-    .box1 .s {
-        font-size: 55px;
-    }
-
-    .wb {
-        margin: 45px 0 0 0;
-        padding: 0;
-        text-align: center;
-        font-size: 16px;
-    }
-
-    .gd {
-        margin: 5px 0 0 0;
-        text-align: center;
-        font-size: 43px;
-        line-height: 1.1;
-    }
-
-    .aga {
-        margin: 0;
-        text-align: center;
-        font-size: 48px;
-    }
-
-    .yf {
-        margin: 15px 0 0 0;
-        text-align: center;
-        font-size: 16px;
-    }
-
-    .yf1 {
-        margin: 5px 0 0 0;
-        text-align: center;
-        font-size: 16px;
-    }
-
-
-    /* Decorative waves */
-
-    .wave {
-        width: 330px;
-        height: 80px;
-    }
-
-    .wave1 {
-        left: -80px;
-        top: 350px;
-        transform: rotate(18deg);
-    }
-
-    .wave2 {
-        left: -50px;
-        top: 365px;
-        transform: rotate(18deg);
-    }
-
-    .wave3 {
-        left: -20px;
-        top: 375px;
-        transform: rotate(18deg);
-    }
-
-
-    /* Music notes */
-
-    .music-note {
-        font-size: 35px;
-    }
-
-    .note1 {
-        left: 75%;
-        top: 48%;
-    }
-
-    .note2 {
-        left: 82%;
-        top: 78%;
-        font-size: 30px;
-    }
-
-    .note3 {
-        left: 5%;
-        bottom: 5%;
-        font-size: 35px;
-    }
-
-    .note4 {
-        right: 8%;
-        top: 25%;
-        font-size: 30px;
-    }
-
-
-    /* Stars */
-
-    .music-star {
-        font-size: 35px;
-    }
-
-    .star1 {
-        left: 82%;
-        top: 62%;
-    }
-
-    .star2 {
-        top: 38%;
-        left: 15%;
-    }
-
-    .star3 {
-        top: 8%;
-        left: 80%;
-    }
-
-
-    /* Headphone */
-
-    .headphone {
-        left: 50%;
-        top: 250px;
-        transform: translateX(-50%) rotate(-8deg) scale(0.55);
-        transform-origin: center;
-    }
-
-
-    /* ============================== */
-    /*          LOGIN SECTION          */
-    /* ============================== */
-
-    .box {
-        width: 100%;
-        height: auto;
-        min-height: auto;
-        padding: 0 15px 40px 15px;
-    }
-
-
-    /* Top bar */
-
-    .top-bar {
-        width: 100%;
-        margin: 10px 0 15px 0;
-        text-align: center;
-        font-size: 12px;
-    }
-
-    .tm,
-    .tm1 {
-        margin-left: 5px;
-    }
-
-
-    /* Login panel */
-
-    .lpb {
-        width: 100%;
-        height: auto;
-        min-height: 600px;
-
-        margin: 0 auto;
-
-        padding: 20px 15px 30px 15px;
-
-        border-radius: 22px;
-    }
-
-    .lpb:hover {
-        transform: none;
-    }
-
-
-    /* Login logo */
-
-    .lpb .logo {
-        margin: 5px auto 15px auto !important;
-        text-align: center;
-        font-size: 29px !important;
-    }
-
-    .s1 {
-        font-size: 55px;
-    }
-
-
-    /* Login text */
-
-    .lis {
-        width: 100%;
-        margin: 10px 0 20px 0;
-
-        text-align: center;
-
-        font-size: 14px;
-        line-height: 1.4;
-    }
-
-
-    /* Profile image */
-
-    .ima {
-        width: 110px;
-        height: 110px;
-
-        margin: 15px auto 25px auto;
-    }
-
-    .pho {
-        width: 110px;
-        height: 110px;
-    }
-
-
-    /* ============================== */
-    /*             FORM               */
-    /* ============================== */
-
-    form {
-        width: 100%;
-        height: auto;
-    }
-
-    .input {
-        width: 100%;
-        height: 52px;
-
-        margin: 0 0 15px 0;
-
-        padding: 0 14px;
-
-        gap: 10px;
-
-        border-radius: 13px;
-    }
-
-    .input > span {
-        font-size: 18px;
-        flex-shrink: 0;
-    }
-
-    .input input {
-        width: 100%;
-        min-width: 0;
-
-        font-size: 15px;
-    }
-
-
-    /* Login button */
-
-    .mar {
-        margin-top: 25px;
-    }
-
-    .login {
-        display: block;
-
-        width: 120px;
-
-        margin: 0 auto;
-
-        padding: 10px 15px;
-
-        text-align: center;
-
-        font-size: 18px;
-    }
-
-
-    /* Line */
-
-    .dass {
-        width: 85%;
-
-        margin: 30px auto 0 auto;
-    }
-
-
-    /* Forgot password */
-
-    .fp {
-        position: static;
-
-        display: block;
-
-        width: 100%;
-
-        margin: 15px 0 0 0;
-
-        text-align: center;
-
-        font-size: 13px;
-    }
-
-
-    /* Social icons */
-
-    .social {
-        width: 100%;
-
-        height: auto;
-
-        margin: 20px 0 0 0;
-
-        justify-content: center;
-
-        gap: 20px;
-    }
-
-    .fa-google {
-        font-size: 20px;
-        padding: 10px;
-    }
-
-    .fa-apple {
-        font-size: 22px;
-        padding: 11px;
-    }
-
-    .fa-facebook-f {
-        font-size: 22px;
-        padding: 10px 12px;
-    }
-
-
-    /* Sign up */
-
-    .su {
-        width: 100%;
-
-        margin: 20px 0 0 0;
-
-        text-align: center;
-
-        font-size: 13px;
-    }
-    
-     .star2{
-        /* display: none; */
-        top: 45%;
-    }
- .star3{
-        display: none;
-    }
- .star4{
-        display: none;
-    }
- .star5{
-        display: none;
-    }
-    .line1{
-        display: none;
-    }
-    .line2{
-        display: none;
-    }
-    .wave1{
-       display: none;
-    }
-    .wave2{
-        display: none;
-    }
-    .wave3{
-        display: none;
-    }
-
-}
-/* ================================================= */
-/*   BOOK FLIP (Sign Up page)                        */
-/*   Eta tomar "Maity Music login.css" er EKDOM SHESHE */
-/*   (mobile media query er pore) paste koro          */
-/* ================================================= */
-
-/* checkbox ta lukano thakbe */
-.flip-toggle {
-    display: none;
-}
-
-/* ---------- Common (desktop + mobile) ---------- */
-
-.ggg {
-    cursor: pointer;
-}
-
-.back-link {
-    cursor: pointer;
-}
-
-/* Right side: under (sign up) ar leaf (login) ek-i jayegay stack hoy */
-.right {
-    position: relative;
-    display: grid;
-    width: 100%;
-    perspective: 2200px;
-}
-
-.right > .under,
-.right > .leaf {
-    grid-area: 1 / 1;
-}
-
-/* ---------- LEAF: je page ta ghurbe ---------- */
-
-.leaf {
-    position: relative;
-    z-index: 2;
-    transform-style: preserve-3d;
-    transform-origin: left center;       /* baam dik e hinge, book er moto */
-    transition: transform 1.1s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
-
-.leaf-front {
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-}
-
-/* Leaf er pichon (ulte dile baam dike dekha jay) */
-.leaf-back {
-    position: absolute;
-    inset: 0;
-    overflow: hidden;
-    transform: rotateY(180deg);
-    -webkit-backface-visibility: hidden;
-    backface-visibility: hidden;
-
-    /* opaque background, jate niche er left page dekha na jay */
-    background:
-        radial-gradient(circle at 25% 20%, #043d26 0%, transparent 55%),
-        linear-gradient(135deg, #021711, #00100c 60%, #031c14);
-
-    /* spine er chhaya (right edge = hinge) */
-    box-shadow: inset -30px 0 40px -15px rgba(0, 0, 0, 0.75);
-}
-
-/* Sign Up click korle page ulte jabe */
-#flip:checked ~ .right .leaf {
-    transform: rotateY(-180deg);
-}
-
-/* ---------- UNDER: sign up page ---------- */
-
-.under {
-    position: relative;
-    z-index: 1;
-
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.5s 0.4s, visibility 0s 0.9s;
-}
-
-#flip:checked ~ .right .under {
-    opacity: 1;
-    visibility: visible;
-    transition: opacity 0.3s 0s, visibility 0s 0s;
-}
-
-/* page er baam edge e halka chhaya, jate gobhirota mone hoy */
-.under::before {
-    content: "";
-    position: absolute;
-    left: 0;
-    top: 0;
-    bottom: 0;
-    width: 40px;
-    background: linear-gradient(to right, rgba(0, 0, 0, 0.5), transparent);
-    pointer-events: none;
-    z-index: 3;
-}
-
-/* Sign up form er chhoto kichu */
-.mar-sm {
-    margin-top: 5%;
-}
-
-.signup-btn {
-    border: none;
-    cursor: pointer;
-    font-family: inherit;
-}
-
-.su-msg {
-    min-height: 20px;
-    margin: 6px 0 0 8%;
-    font-size: 14px;
-    color: #00ff88;
-}
-
-.su-error {
-    color: #ff6b6b;
-}
-
-/* ---------- DESKTOP only ---------- */
-
-@media screen and (min-width: 969px) {
-
-    /* duto page ke thik 50/50 kore dao, jate hinge thik majhkhane thake */
-    .book > .box1 {
-        width: 50%;
-    }
-
-    .right {
-        width: 50%;
-    }
-
-    .leaf .box {
-        width: 100%;
-    }
-
-    .back-bar {
-        margin-left: 13%;
-    }
-}
-
-/* ---------- MOBILE: 3D flip bondho, shudhu swap hobe ---------- */
-
-@media screen and (max-width: 968px) {
-
-    .right {
-        display: block;
-        perspective: none;
-    }
-
-    .leaf {
-        transform: none !important;
-        transition: none;
-    }
-
-    .leaf-back {
-        display: none;
-    }
-
-    .under {
-        display: none;
-        opacity: 1;
-        visibility: visible;
-        transition: none;
-    }
-
-    .under::before {
-        display: none;
-    }
-
-    #flip:checked ~ .right .leaf {
-        display: none;
-    }
-
-    #flip:checked ~ .right .under {
-        display: block;
-    }
-
-    .su-msg {
-        text-align: center;
-        margin-left: 0;
-    }
-}
-
-/* jader device e animation kom rakhar setting ache */
-@media (prefers-reduced-motion: reduce) {
-    .leaf,
-    .under {
-        transition: none !important;
-    }
-}
-
-/* NEW: password chokh icon */
-.eye-btn{
-    background: none;
-    border: none;
-    color: #d7d7d7;
-    cursor: pointer;
-    font-size: 18px;
-    padding: 0;
-    flex-shrink: 0;
-}
-.eye-btn:hover{
-    color: #14e878;
-}
-
-/* NEW: login error message (layout nore na) */
-.mar{
-    position: relative;
-}
-.login-msg{
-    position: absolute;
-    left: 8%;
-    bottom: 15px;
-    font-size: 14px;
-    color: #ff6b6b;
-}
-@media screen and (max-width: 968px) {
-    .login-msg{
-        left: 0;
-        width: 100%;
-        text-align: center;
-    }
-}
-
-
-
-
-
-
-
-
-    
-
-
-</style>
-<body >
+<body>
     <main class="book">
 
         <!-- Hidden checkbox: Sign Up / Back label gula eta ke tick-untick kore, tai page ulte jay -->
@@ -1220,18 +192,21 @@ form{
                         </div>
                         <div class="input">
                             <span>✉</span>
-                            <input class="inp" type="email" placeholder="Email Or Phone" id="su-email" autocomplete="email" required>
+                            <input class="inp" type="text" placeholder="Gmail or Phone Number" id="su-email" autocomplete="username" required>
+                            <button type="button" class="otp-btn" id="send-otp">Send OTP</button>
+                        </div>
+                        <div class="input">
+                            <span>🔑</span>
+                            <input class="inp" type="text" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP" id="su-otp" autocomplete="one-time-code">
                         </div>
                         <div class="input">
                             <span>🔒</span>
                             <input class="inp" type="password" placeholder="Create Password" id="su-password" autocomplete="new-password" required>
-                            <!-- NEW: chokh icon -->
                             <button type="button" class="eye-btn" data-target="su-password" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
                         </div>
                         <div class="input">
                             <span>🔒</span>
                             <input class="inp" type="password" placeholder="Confirm Password" id="su-password2" autocomplete="new-password" required>
-                            <!-- NEW: chokh icon -->
                             <button type="button" class="eye-btn" data-target="su-password2" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
                         </div>
                         <div class="su-msg" id="su-msg"></div>
@@ -1266,15 +241,14 @@ form{
                             <form action="" id="login-form">
                                 <div class="input">
                                     <span>✉</span>
-                                    <input class="inp" type="email" placeholder="Email Or Phone" id="email">
+                                    <input class="inp" type="text" placeholder="Gmail or Phone Number" id="email" autocomplete="username">
                                 </div>
                                 <div class="input">
                                     <span>🔒</span>
                                     <input class="inp" type="password" placeholder="Enter Password" id="password">
-                                    <!-- NEW: chokh icon -->
                                     <button type="button" class="eye-btn" data-target="password" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
                                 </div>
-                                <!-- NEW: error message ei .mar er bhitore (layout nore na) -->
+                                <!-- error / success message ei .mar er bhitore (layout nore na) -->
                                 <div class="mar"><div class="login-msg" id="login-msg"></div></div>
                                 <a class="login" href="Maity Music.html" id="login-btn">Log In</a>
                             </form>
@@ -1315,13 +289,27 @@ form{
     const msg = document.getElementById('su-msg');
     const loginMsg = document.getElementById('login-msg');
 
+    // message dekhanor helper (animation protibar notun kore chole)
+    function showLoginMsg(text, type) {
+        loginMsg.className = 'login-msg';
+        void loginMsg.offsetWidth;            // animation restart korar trick
+        loginMsg.textContent = text;
+        loginMsg.className = 'login-msg ' + type;
+    }
+    function showSignupMsg(text, type) {
+        msg.className = 'su-msg';
+        void msg.offsetWidth;
+        msg.textContent = text;
+        msg.className = 'su-msg ' + (type === 'error' ? 'su-error shake' : 'glow');
+    }
+
     // users ke localStorage theke pore ney
     function getUsers() {
         try { return JSON.parse(localStorage.getItem('maityUsers')) || {}; }
         catch (err) { return {}; }
     }
 
-    // NEW: chokh icon click korle password dekhabe / lukabe
+    // chokh icon click korle password dekhabe / lukabe
     function resetEyes() {
         document.querySelectorAll('.eye-btn').forEach(function (btn) {
             document.getElementById(btn.dataset.target).type = 'password';
@@ -1342,45 +330,213 @@ form{
         });
     });
 
+    // ---------- GMAIL ba PHONE (ek-i box e) ----------
+    function isGmail(v) { return /^[a-z0-9._%+-]+@gmail\.com$/i.test(v); }
+
+    // return: { type: 'email' | 'phone', key } ba null (thik na hole)
+    // phone: Indian 10 digit (6-9 diye shuru), age +91 / 91 / 0 thakle-o cholbe
+    function parseId(raw) {
+        const v = (raw || '').trim();
+        if (isGmail(v)) return { type: 'email', key: v.toLowerCase() };
+        const compact = v.replace(/[\s\-()]/g, '');
+        const m = compact.match(/^(?:\+?91|0)?([6-9]\d{9})$/);
+        if (m) return { type: 'phone', key: m[1] };
+        return null;
+    }
+
+    // ---------- OTP SETTINGS ----------
+    // Gmail OTP: EmailJS (emailjs.com) e account khule ei 3ta jinish bosao.
+    // Na bosale DEMO mode: OTP screen e-i dekhabe (email jabe na).
+    const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+    const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
+    const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
+    const DEMO_MODE = EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY';
+
+    // Phone OTP: asol SMS pathate SMS service lagbe (paid). Connect korle SMS_ENABLED = true koro
+    // ar niche sendSmsOtp e tomar service er code boshao. Ager por DEMO mode cholbe.
+    const SMS_ENABLED = false;
+    function sendSmsOtp(phone, code) {
+        // Example (tomar nijer server er endpoint):
+        // return fetch('https://tomar-server.com/send-sms', {
+        //     method: 'POST',
+        //     headers: { 'Content-Type': 'application/json' },
+        //     body: JSON.stringify({ phone: '+91' + phone, otp: code })
+        // }).then(function (r) { if (!r.ok) throw new Error('sms failed'); });
+        return Promise.reject(new Error('SMS service not connected'));
+    }
+
+    const OTP_VALID_MS = 5 * 60 * 1000;   // OTP 5 minute valid
+    const RESEND_SECONDS = 30;            // abar pathate 30 second opekkha
+    const MAX_TRIES = 5;                  // 5 bar bhul dile notun OTP lagbe
+
+    if (!DEMO_MODE && typeof emailjs !== 'undefined') {
+        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
+    }
+
+    const sendOtpBtn = document.getElementById('send-otp');
+    const suIdInput = document.getElementById('su-email');
+    const suOtpInput = document.getElementById('su-otp');
+    let otpState = { code: null, id: null, expires: 0, tries: 0 };
+    let resendTimer = null;
+
+    // 6 digit random OTP
+    function makeOtp() {
+        const a = new Uint32Array(1);
+        crypto.getRandomValues(a);
+        return String(a[0] % 1000000).padStart(6, '0');
+    }
+
+    function startResendCountdown() {
+        let left = RESEND_SECONDS;
+        sendOtpBtn.disabled = true;
+        sendOtpBtn.textContent = 'Resend in ' + left + 's';
+        clearInterval(resendTimer);
+        resendTimer = setInterval(function () {
+            left--;
+            if (left <= 0) {
+                clearInterval(resendTimer);
+                sendOtpBtn.disabled = false;
+                sendOtpBtn.textContent = 'Resend OTP';
+            } else {
+                sendOtpBtn.textContent = 'Resend in ' + left + 's';
+            }
+        }, 1000);
+    }
+
+    function resetOtpUI() {
+        clearInterval(resendTimer);
+        sendOtpBtn.disabled = false;
+        sendOtpBtn.textContent = 'Send OTP';
+        otpState = { code: null, id: null, expires: 0, tries: 0 };
+        suOtpInput.value = '';
+    }
+
+    // OTP box e shudhu number
+    suOtpInput.addEventListener('input', function () {
+        suOtpInput.value = suOtpInput.value.replace(/\D/g, '');
+    });
+
+    // Gmail / phone bodlale purono OTP bathil
+    suIdInput.addEventListener('input', function () {
+        if (!otpState.id) return;
+        const p = parseId(suIdInput.value);
+        if (!p || p.key !== otpState.id) resetOtpUI();
+    });
+
+    // ---------- SEND OTP ----------
+    sendOtpBtn.addEventListener('click', function () {
+        const idInfo = parseId(suIdInput.value);
+        const fullName = document.getElementById('su-name').value.trim();
+
+        if (!idInfo) {
+            showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱', 'error');
+            return;
+        }
+        const users = getUsers();
+        if (users[idInfo.key] && typeof users[idInfo.key] === 'object') {
+            showSignupMsg("You're already with us 💚 Please log in.", 'error');
+            return;
+        }
+
+        const code = makeOtp();
+        const where = idInfo.type === 'email' ? idInfo.key : '+91 ' + idInfo.key;
+        sendOtpBtn.disabled = true;
+        sendOtpBtn.textContent = 'Sending...';
+
+        function onSent() {
+            otpState = { code: code, id: idInfo.key, expires: Date.now() + OTP_VALID_MS, tries: 0 };
+            startResendCountdown();
+        }
+        function onFail() {
+            sendOtpBtn.disabled = false;
+            sendOtpBtn.textContent = 'Send OTP';
+            showSignupMsg("Couldn't send OTP 😢 Please try again.", 'error');
+        }
+
+        const demo = idInfo.type === 'email' ? DEMO_MODE : !SMS_ENABLED;
+        if (demo) {
+            onSent();
+            showSignupMsg('DEMO mode: your OTP is ' + code + ' 🔑', 'success');
+            return;
+        }
+
+        let job;
+        if (idInfo.type === 'email') {
+            if (typeof emailjs === 'undefined') { onFail(); return; }
+            job = emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                to_email: idInfo.key,
+                to_name: fullName || 'Music Lover',
+                otp: code
+            });
+        } else {
+            job = sendSmsOtp(idInfo.key, code);
+        }
+        job.then(function () {
+            onSent();
+            showSignupMsg('OTP sent to ' + where + (idInfo.type === 'email' ? ' 📩 Check inbox or spam.' : ' 📩'), 'success');
+        }, onFail);
+    });
+
     // ---------- SIGN UP ----------
     signupForm.addEventListener('submit', function (e) {
         e.preventDefault();
+        const fullName = document.getElementById('su-name').value.trim();
+        const idInfo = parseId(suIdInput.value);
+        const enteredOtp = suOtpInput.value.trim();
         const p1 = document.getElementById('su-password').value;
         const p2 = document.getElementById('su-password2').value;
 
+        if (!idInfo) {
+            showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱', 'error');
+            return;
+        }
+        if (!otpState.code || otpState.id !== idInfo.key) {
+            showSignupMsg('Please tap Send OTP first 📩', 'error');
+            return;
+        }
+        if (Date.now() > otpState.expires) {
+            otpState.code = null;
+            showSignupMsg('OTP expired ⏰ Please send a new one.', 'error');
+            return;
+        }
+        if (enteredOtp !== otpState.code) {
+            otpState.tries++;
+            if (otpState.tries >= MAX_TRIES) {
+                otpState.code = null;
+                showSignupMsg('Too many wrong tries 🚫 Please send a new OTP.', 'error');
+            } else {
+                showSignupMsg('Wrong OTP 🔑 Please try again.', 'error');
+            }
+            return;
+        }
         if (p1 !== p2) {
-            msg.textContent = 'Passwords do not match.';
-            msg.className = 'su-msg su-error';
+            showSignupMsg("Oops! Passwords don't match 🔒 Try again.", 'error');
             return;
         }
 
-        const fullName = document.getElementById('su-name').value.trim();
-        const suEmail = document.getElementById('su-email').value.trim().toLowerCase();
         const users = getUsers();
-
-        // NEW: ek-i email e duibar sign up atkano
-        if (users[suEmail] && typeof users[suEmail] === 'object') {
-            msg.textContent = 'This email is already registered. Please log in.';
-            msg.className = 'su-msg su-error';
+        if (users[idInfo.key] && typeof users[idInfo.key] === 'object') {
+            showSignupMsg("You're already with us 💚 Please log in.", 'error');
             return;
         }
 
-        // NEW: ekhon nam + password dutoi save hocche
-        users[suEmail] = { name: fullName, password: p1 };
+        // nam + password dutoi save hocche (key = gmail ba phone number)
+        users[idInfo.key] = { name: fullName, password: p1 };
         localStorage.setItem('maityUsers', JSON.stringify(users));
 
-        msg.textContent = 'Account created! Taking you to login...';
-        msg.className = 'su-msg';
+        showSignupMsg('Welcome to Maity Music! 🎶 Taking you to login...', 'success');
         setTimeout(function () {
             flip.checked = false;
             signupForm.reset();
             resetEyes();
+            resetOtpUI();
             msg.textContent = '';
-        }, 1200);
+            msg.className = 'su-msg';
+        }, 1600);
     });
 
     flip.addEventListener('change', function () {
-        if (!flip.checked) msg.textContent = '';
+        if (!flip.checked) { msg.textContent = ''; msg.className = 'su-msg'; }
         loginMsg.textContent = '';
     });
 
@@ -1391,42 +547,52 @@ form{
         e.preventDefault();   // age check hobe, tarpor page jabe
         loginMsg.textContent = '';
 
-        const email = document.getElementById('email').value.trim().toLowerCase();
+        const rawId = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
 
-        if (!email || !password) {
-            loginMsg.textContent = 'Please enter email & password 😊';
+        if (!rawId || !password) {
+            showLoginMsg('Please enter Gmail/phone & password 😊', 'error');
+            return;
+        }
+        const idInfo = parseId(rawId);
+        if (!idInfo) {
+            showLoginMsg('Please enter a valid Gmail or phone number 📱', 'error');
             return;
         }
 
         const users = getUsers();
-        const user = users[email];
+        const user = users[idInfo.key];
 
-        // NEW: register kora ache kina check
+        // register kora ache kina check
         if (!user) {
-            loginMsg.textContent = 'Oops! Not registered yet 🎧 Sign Up first!';
+            showLoginMsg('Oops! Not registered yet 🎧 Sign Up first!', 'error');
             return;
         }
         // purono account (shudhu nam save chilo, password chilo na)
         if (typeof user === 'string') {
-           loginMsg.textContent = 'Welcome back 💚 Please Sign Up once again.';
+            showLoginMsg('Welcome back 💚 Please Sign Up once again.', 'error');
             return;
         }
-        // NEW: password mile kina check
+        // password mile kina check
         if (user.password !== password) {
-           loginMsg.textContent = 'Oops! Wrong password 🔒 Try again.';
+            showLoginMsg('Oops! Wrong password 🔒 Try again.', 'error');
             return;
         }
 
         // shob thik: shudhu prothom nam rakho (poddhoti bad)
         let name = (user.name || '').trim().split(' ')[0];
-        if (!name) name = email.split('@')[0];
+        if (!name) name = idInfo.type === 'email' ? idInfo.key.split('@')[0] : 'Friend';
 
         localStorage.setItem('maityCurrentUser', name);
-        window.location.href = 'Maity Music.html';
+
+        // sobuj glow message, tarpor dashboard e jabe
+        showLoginMsg('Welcome back, ' + name + '! 🎶', 'success');
+        setTimeout(function () {
+            window.location.href = 'Maity Music.html';
+        }, 1200);
     });
 
-    // NEW: Enter chaple-o login hobe
+    // Enter chaple-o login hobe, ar lekhar shomoy message muche jabe
     ['email', 'password'].forEach(function (id) {
         document.getElementById(id).addEventListener('keydown', function (e) {
             if (e.key === 'Enter') loginBtn.click();

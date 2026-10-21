@@ -224,6 +224,7 @@ main{
     margin-left: 56%;
     font-size: 15px;
     /* margin-bottom: 5%; */
+    display: none;
 
 }
 .tm{
@@ -973,6 +974,7 @@ form{
     transform: rotateY(180deg);
     -webkit-backface-visibility: hidden;
     backface-visibility: hidden;
+    height: 107%;
 
     /* opaque background, jate niche er left page dekha na jay */
     background:
