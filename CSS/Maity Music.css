@@ -13,6 +13,7 @@ body{
     #aa{
         display: none;
     }
+   
     .my-profile { position: relative; }
  .toast{
             position: fixed;
@@ -1021,6 +1022,9 @@ display: inline-block;
     font-size: 14px;
 /* margin-left: 1%; */
 /* gap: 100px; */
+    }
+    .exh{
+        display: none;
     }
    
 
