@@ -1029,10 +1029,12 @@ body.has-canvas main{ margin-right: 300px; }
         background: #000;
 
         z-index: 1000;
+        /* display: none; */
     }
 
     .logo {
-        display: none;
+        margin-top: 12%;
+        /* display: none; */
     }
 
     .sb nav {
@@ -1042,6 +1044,10 @@ body.has-canvas main{ margin-right: 300px; }
         display: flex;
         align-items: center;
         justify-content: space-around;
+        display: none;
+    }
+    .s{
+        font-size: 70px;
     }
 
     .sb nav a {
@@ -1256,7 +1262,8 @@ body.has-canvas main{ margin-right: 300px; }
     .cover3,
     .cover4,
     .cover5,
-    .cover6 {
+    .cover6,
+    .cover7 {
 
         width: 125px;
         height: 125px;
