@@ -235,11 +235,14 @@
                     showMsg('Too many wrong tries 🚫 Please send a new OTP.', 3000);
                 } else {
                     showMsg('Wrong OTP 🔑 Please try again.', 2500);
+                    message.style.backgroundColor="red";
                 }
                 return;
             }
             otpState.verified = true;
             showMsg('Account verified successfully ✅', 2500);
+                    message.style.backgroundColor="lightgreen";
+
         });
 
         // ---------- 3) RESET PASSWORD ----------
@@ -258,6 +261,7 @@
             }
             if (p1 !== p2) {
                 showMsg("Oops! Passwords don't match 🔒 Try again.", 3000);
+                    message.style.backgroundColor="red";
                 return;
             }
 
@@ -270,6 +274,7 @@
             resetOtpState();
 
             showMsg('Password reset successful ✅', 1400);
+                    message.style.backgroundColor="lightgreen";
             setTimeout(function () {
                 window.location.href = 'index.html';
             }, 1400);
