@@ -1,4 +1,3 @@
-
 // ================= PROFILE MENU =================
 const profileBtn  = document.getElementById('profileBtn');
 const profileMenu = document.getElementById('profileMenu');
@@ -101,6 +100,44 @@ audio.addEventListener('pause', function () {
     cVideo.pause();
 });
 
+// ================= MEDIA SESSION (lock screen controls + background play) =================
+function updateMediaSession(song) {
+    if (!('mediaSession' in navigator)) return;
+
+    navigator.mediaSession.metadata = new MediaMetadata({
+        title:  song.querySelector('.des1').textContent.trim(),
+        artist: song.querySelector('.des2').textContent.trim(),
+        album:  'Maity Music',
+        artwork: [{ src: song.querySelector('.image-in').src, sizes: '512x512' }]
+    });
+}
+
+if ('mediaSession' in navigator) {
+    navigator.mediaSession.setActionHandler('play',          function () { audio.play(); });
+    navigator.mediaSession.setActionHandler('pause',         function () { audio.pause(); });
+    navigator.mediaSession.setActionHandler('previoustrack', function () { changeSong(-1); });
+    navigator.mediaSession.setActionHandler('nexttrack',     function () { changeSong(1); });
+    try {
+        navigator.mediaSession.setActionHandler('seekto', function (d) {
+            if (d.seekTime != null) audio.currentTime = d.seekTime;
+        });
+    } catch (e) {}
+
+    audio.addEventListener('play',  function () { navigator.mediaSession.playbackState = 'playing'; });
+    audio.addEventListener('pause', function () { navigator.mediaSession.playbackState = 'paused'; });
+    audio.addEventListener('timeupdate', function () {
+        try {
+            if (isFinite(audio.duration)) {
+                navigator.mediaSession.setPositionState({
+                    duration: audio.duration,
+                    playbackRate: audio.playbackRate,
+                    position: audio.currentTime
+                });
+            }
+        } catch (e) {}
+    });
+}
+
 // ================= PLAY SONG =================
 function playSong(index) {
     const song = songs[index];
@@ -119,6 +156,7 @@ function playSong(index) {
     pArtist.textContent = song.querySelector('.des2').textContent;
 
     loadCanvas(song);
+    updateMediaSession(song);
     updatePip();
 }
 
@@ -279,7 +317,14 @@ audio.addEventListener('loadedmetadata', updatePipTime);
   const vel = new Array(N).fill(0);
   const smooth = new Array(N).fill(0);
 
-  const canAnalyse = location.protocol !== "file:" && (window.AudioContext || window.webkitAudioContext);
+  // MOBILE FIX: touch device e AudioContext use korbo na.
+  // AudioContext screen lock e suspend hoy, tai gan bondho hoye jay.
+  // Mobile e gan sorasori <audio> diye cholbe, dot animation e fakeLevel kaj korbe.
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
+
+  const canAnalyse = !isTouch &&
+                     location.protocol !== "file:" &&
+                     (window.AudioContext || window.webkitAudioContext);
 
   let ctx, analyser, data;
 
@@ -366,6 +411,7 @@ audio.addEventListener('loadedmetadata', updatePipTime);
   }
   requestAnimationFrame(frame);
 })();
+
 document.addEventListener('DOMContentLoaded', function () {
     let name = 'User';
     try { name = localStorage.getItem('maityCurrentUser') || 'User'; } catch (e) {}
