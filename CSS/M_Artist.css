@@ -1,0 +1,622 @@
+/* =========================================================
+   Maity Music - Artists' List (Responsive)
+   Desktop + Tablet + Mobile (iPhone / Android)
+   ========================================================= */
+
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    padding: 0;
+    margin: 0;
+    background-color: black;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -webkit-text-size-adjust: 100%;
+}
+
+img {
+    max-width: 100%;
+    display: block;
+}
+
+/* ---------------- SIDEBAR (Desktop) ---------------- */
+.sb {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    width: 240px;
+    background-color: #000;
+    padding: 25px 18px;
+    z-index: 100;
+}
+
+.logo {
+    color: #1ed760;
+    font-size: 27px;
+    margin-bottom: 35px;
+    margin-left: 10px;
+    white-space: nowrap;
+}
+
+.s {
+    font-size: 102px;
+    text-shadow: 0 0 10px #14e878, 0 0 25px #14e878;
+}
+
+.search,
+.on {
+    display: block;
+    text-decoration: none;
+    color: #b3b3b3;
+    font-size: 18px;
+    padding-top: 8px;
+    padding-bottom: 5px;
+    padding-left: 13px;
+    border-radius: 15px;
+    margin-bottom: 21px;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.on {
+    color: white;
+    background: #282828;
+}
+
+.search {
+    cursor: default;
+    font-size: 30px;
+    padding-left: 47px;
+    background-color: #1ed760;
+    color: black;
+    box-shadow: 0 0 2px #1ed760, 0 0 20px #1ed760;
+    margin-top: 20%;
+}
+
+.of {
+    height: 34%;
+    width: auto;
+    border: 1px solid #1ed760;
+    position: sticky;
+    top: 0;
+    left: 0;
+    overflow-y: auto;
+    border-top-right-radius: 30%;
+    border-bottom-left-radius: 30%;
+    margin-top: 15%;
+    scrollbar-width: none;
+    box-shadow: 0 0 10px #1ed760;
+}
+
+.of:hover {
+    transform: scale(1.04);
+    transition: all ease-in-out 0.3s;
+}
+
+.play-list a {
+    display: block;
+    text-decoration: none;
+    padding: 8px 0 5px 17px;
+    color: #b3b3b3;
+    font-size: 22px;
+    border-top-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    margin-bottom: 8px;
+}
+
+.play-list a:hover {
+    color: white;
+    background: #282828;
+}
+
+.color-line {
+    border: 1px solid #1ed760;
+    width: 0;
+    height: 100vh;
+    margin-left: 18.6%;
+    position: fixed;
+}
+
+/* ---------------- MAIN ---------------- */
+main {
+    margin-left: 278px;
+    min-height: auto;
+    padding-bottom: 110px;
+    background: linear-gradient(#252525, #121212 500px);
+    color: white;
+}
+
+.top-ser {
+    height: auto;
+    width: 99.2%;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+    padding-top: 8px;
+}
+
+.sr {
+    margin-left: 86px;
+    width: 60%;
+}
+
+.sr form {
+    display: flex;
+    align-items: center;
+}
+
+input {
+    width: 64%;
+    background-color: black;
+    height: 45px;
+    outline: none;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    color: white;
+    font-size: 18px;
+    padding: 0 14px;
+    box-shadow:
+        0 0 10px rgba(0, 255, 136, 0.6),
+        0 0 25px rgba(0, 255, 136, 0.25),
+        inset 0 0 20px rgba(0, 255, 136, 0.08);
+}
+
+input:hover {
+    border: 1px solid skyblue;
+}
+
+.srcc {
+    font-size: 23px;
+    color: white;
+    background-color: black;
+    border: 1px solid #1ed760;
+    padding: 7px 15px 8px;
+    margin-top: 14px;
+    border-radius: 13px;
+    margin-left: 14px;
+    cursor: pointer;
+    margin-top: 0;
+}
+
+.srcc:hover {
+    background-color: #1ed760;
+    color: black;
+    transition: all ease-in-out 0.2s;
+}
+
+.country {
+    width: 100%;
+    text-align: center;
+    font-size: 30px;
+    margin-top: 2%;
+    animation: cun 7s infinite;
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    cursor: default;
+    scroll-margin-top: 20px;
+}
+
+@keyframes cun {
+    from { color: white; }
+    to   { color: #1ed760; }
+}
+
+.number {
+    color: #1ed760;
+    animation: num 7s infinite;
+}
+
+@keyframes num {
+    to {
+        color: white;
+        text-shadow: 0 0 40px #1ed760, 0 0 5px #1ed760;
+    }
+}
+
+/* ---------------- ARTIST CARDS ---------------- */
+.a-box {
+    width: 84%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 3%;
+    margin-left: 8%;
+}
+
+.a-box1 {
+    width: 84%;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+    margin-top: 3%;
+    margin-left: 8%;
+}
+
+.art {
+    width: 25%;
+    text-decoration: none;
+}
+
+.adb {
+    position: relative;
+    height: auto;
+    width: 100%;
+    border: 0.1px solid #1ed760;
+    background: #181818;
+    border-radius: 13px;
+}
+
+.alogo {
+    height: 160px;
+    width: 60%;
+    border: 1px solid #1ed760;
+    box-shadow: 0 0 10px #1ed760;
+    border-radius: 50%;
+    margin-top: 7%;
+    margin-left: 20%;
+}
+
+.image {
+    height: 100%;
+    width: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.a-name {
+    font-family: cursive;
+    color: #b3b3b3;
+    margin-top: 6%;
+    font-size: 20px;
+    text-align: center;
+}
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.ncount {
+    margin-left: 11%;
+    font-size: 20px;
+    color: #b3b3b3;
+    font-family: "Bebas Neue", sans-serif;
+    display: none;
+    cursor: default;
+}
+
+.adb:hover .ncount {
+    display: inline-block;
+}
+
+.ncount:hover {
+    color: white;
+    transition: all ease-in-out 0.2s;
+}
+
+.btn {
+    padding: 7px;
+    margin-top: 7%;
+    font-size: 17px;
+    margin-left: 31%;
+    margin-bottom: 5%;
+    background-color: #1ed760;
+    border: none;
+    color: black;
+    border-radius: 15px;
+    cursor: pointer;
+}
+
+.btn:active {
+    color: #1ed760;
+    background-color: black;
+}
+
+.btn:hover {
+    box-shadow: 0 0 10px #1ed760;
+    transform: scale(1.06);
+    transition: all ease-in-out 0.2s;
+}
+
+.adb:hover {
+    transform: translateY(-9px);
+    transition: all ease-in-out 0.3s;
+    background: #282828;
+    box-shadow: 0 0 10px #1ed760;
+}
+
+.adb:hover .alogo {
+    box-shadow: none;
+}
+
+.adb:hover .a-name {
+    color: white;
+    text-shadow: 0 0 10px #1ed760;
+}
+
+/* =========================================================
+   LARGE LAPTOP / SMALL DESKTOP  (<= 1280px)
+   ========================================================= */
+@media (max-width: 1280px) {
+    .alogo { height: auto; aspect-ratio: 1 / 1; }
+    .a-name { font-size: 18px; }
+    .btn { font-size: 15px; }
+    .sr { margin-left: 40px; }
+}
+
+/* =========================================================
+   TABLET  (<= 1024px)  - iPad, Android tablets
+   Sidebar slim, cards 3 per row
+   ========================================================= */
+@media (max-width: 1024px) {
+    .sb {
+        width: 200px;
+        padding: 20px 12px;
+    }
+
+    .logo { font-size: 21px; margin-left: 4px; margin-bottom: 25px; }
+    .s { font-size: 70px; }
+
+    .on { font-size: 15px; padding-left: 10px; }
+    .search { font-size: 22px; padding-left: 30px; margin-top: 15%; }
+    .of { height: 40%; margin-top: 12%; }
+    .play-list a { font-size: 17px; padding-left: 12px; }
+
+    main { margin-left: 200px; padding-bottom: 60px; }
+
+    .top-ser { width: 100%; }
+    .sr { margin-left: 0; width: 90%; }
+    input { width: 70%; }
+    .srcc { font-size: 18px; }
+
+    .country { font-size: 26px; margin-top: 5%; }
+
+    .a-box,
+    .a-box1 {
+        width: 92%;
+        margin-left: 4%;
+        gap: 14px;
+    }
+
+    .art { width: 31%; }
+    .a-box1 { justify-content: center; }
+
+    .btn { margin-left: 0; margin-right: 0; }
+    .flex { justify-content: center; flex-wrap: wrap; }
+    .ncount { margin-left: 8px; }
+}
+
+/* =========================================================
+   MOBILE / SMALL TABLET (<= 768px)
+   Sidebar becomes a top bar with horizontal category chips
+   ========================================================= */
+@media (max-width: 768px) {
+
+    /* ---- Top bar ---- */
+    .sb {
+        position: sticky;
+        top: 0;
+        left: 0;
+        height: auto;
+        width: 100%;
+        padding: 10px 12px 12px;
+        background: #000;
+        border-bottom: 1px solid #1ed760;
+        box-shadow: 0 2px 14px rgba(30, 215, 96, 0.35);
+    }
+
+    .logo {
+        font-size: 20px;
+        margin: 0 0 8px 2px;
+        line-height: 1.1;
+    }
+
+    .s { font-size: 40px; }
+
+    /* hide big "Catagory" label, keep All Artists link compact */
+    .sb nav {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .on {
+        font-size: 14px;
+        padding: 7px 12px;
+        margin: 0 0 8px;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .search { display: none; }
+
+    /* ---- Category chips (horizontal scroll) ---- */
+    .of {
+        position: static;
+        height: auto;
+        width: 100%;
+        margin: 0;
+        border: none;
+        border-radius: 0;
+        box-shadow: none;
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .of:hover { transform: none; }
+
+    .play-list {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 8px;
+        padding-bottom: 2px;
+    }
+
+    .play-list a {
+        flex: 0 0 auto;
+        white-space: nowrap;
+        font-size: 14px;
+        padding: 8px 14px;
+        margin: 0;
+        border: 1px solid #1ed760;
+        border-radius: 999px;
+        color: #d0d0d0;
+    }
+
+    .play-list a:hover,
+    .play-list a:active {
+        background: #1ed760;
+        color: #000;
+    }
+
+    /* ---- Main ---- */
+    main {
+        margin-left: 0;
+        padding: 0 0 50px;
+    }
+
+    .top-ser {
+        width: 100%;
+        padding: 14px 12px 4px;
+    }
+
+    .sr {
+        margin: 0;
+        width: 100%;
+    }
+
+    .sr form {
+        display: flex;
+        width: 100%;
+        gap: 8px;
+    }
+
+    input {
+        flex: 1;
+        width: auto;
+        min-width: 0;
+        height: 42px;
+        font-size: 16px; /* stops iPhone auto-zoom */
+    }
+
+    .srcc {
+        font-size: 16px;
+        margin: 0;
+        padding: 0 16px;
+        height: 42px;
+    }
+
+    .country {
+        font-size: 22px;
+        margin-top: 28px;
+        padding: 0 10px;
+    }
+
+    /* ---- Cards: 2 per row ---- */
+    .a-box,
+    .a-box1 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 12px;
+        width: 100%;
+        margin: 14px 0 0;
+        padding: 0 12px;
+    }
+
+    .art { width: 100%; }
+
+    .alogo {
+        width: 64%;
+        height: auto;
+        aspect-ratio: 1 / 1;
+        margin: 14px auto 0;
+    }
+
+    .a-name {
+        font-size: 16px;
+        margin-top: 10px;
+        padding: 0 6px;
+    }
+
+    .flex {
+        justify-content: center;
+        padding-bottom: 12px;
+    }
+
+    .btn {
+        margin: 10px 0 0;
+        font-size: 14px;
+        padding: 8px 16px;
+    }
+
+    /* rank badge always visible on touch screens */
+    .ncount {
+        display: block;
+        position: absolute;
+        top: 8px;
+        left: 10px;
+        margin: 0;
+        font-size: 16px;
+        color: #1ed760;
+    }
+
+    .adb:hover .ncount { display: block; }
+
+    /* hover lift is annoying on touch */
+    .adb:hover {
+        transform: none;
+    }
+}
+
+/* =========================================================
+   SMALL PHONES (<= 480px) - iPhone SE, small Androids
+   ========================================================= */
+@media (max-width: 480px) {
+    .logo { font-size: 18px; }
+    .s { font-size: 34px; }
+
+    .play-list a { font-size: 13px; padding: 7px 12px; }
+
+    .country { font-size: 19px; }
+
+    .a-box,
+    .a-box1 {
+        gap: 10px;
+        padding: 0 10px;
+    }
+
+    .a-name { font-size: 14px; }
+    .btn { font-size: 13px; padding: 7px 14px; }
+    .ncount { font-size: 14px; top: 6px; left: 8px; }
+}
+
+/* =========================================================
+   VERY SMALL PHONES (<= 340px)
+   ========================================================= */
+@media (max-width: 340px) {
+    .a-box,
+    .a-box1 { grid-template-columns: 1fr; }
+}
+
+/* =========================================================
+   TOUCH DEVICES (no real hover)
+   ========================================================= */
+@media (hover: none) {
+    .ncount { display: block; }
+    .adb:hover { transform: none; }
+    .btn:hover { transform: none; }
+    .of:hover { transform: none; }
+}
+
+/* Landscape phones: keep top bar short */
+@media (max-width: 900px) and (orientation: landscape) {
+    .sb { padding: 6px 12px 8px; }
+    .logo { margin-bottom: 4px; }
+    .a-box,
+    .a-box1 { grid-template-columns: repeat(3, 1fr); }
+}
