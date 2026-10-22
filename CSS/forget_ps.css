@@ -112,6 +112,7 @@ button{
     background-color: #1ed760;
     height: 100%;
     padding: 20px 16px;
+    color: black;
 }
 button:active{
     zoom: 90%;
@@ -178,13 +179,13 @@ p{
         gap: 0;
     }
     .input{
-        margin-left: 3%;
+        /* margin-left: 3%; */
         height: auto;
         width: auto;
     }
    button{
-    /* margin-left: 0.5%; */
-    font-size: 16px;
+    margin-left: 0.5%;
+    font-size: 14px;
     padding: 9px 3px;
    }
    .input input{
