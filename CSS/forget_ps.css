@@ -9,7 +9,7 @@ body{
         radial-gradient(circle at 15% 20%, #043d26 0%, transparent 30%),
         radial-gradient(circle at 90% 10%, #075a31 0%, transparent 35%),
         linear-gradient(135deg, #021711, #00100c 60%, #031c14);
-    overflow: hidden;
+    /* overflow: hidden; */
     font-family: Arial, Helvetica, sans-serif;
     color: white;
     position: relative;
@@ -166,8 +166,8 @@ p{
         width: auto;
     }
    button{
-    /* margin-left: 1%; */
-    font-size: 20px;
+    /* margin-left: 0.5%; */
+    font-size: 16px;
     padding: 9px 3px;
    }
    .input input{
@@ -193,10 +193,11 @@ p{
     justify-content: center;
 
    }
-   .in-b,
+   /* .in-b,
    .in-u{
     display: flex;
     align-items: center;
     justify-content: center;
-   }
+   } */
 }
+
