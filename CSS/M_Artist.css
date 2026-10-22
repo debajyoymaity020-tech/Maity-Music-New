@@ -42,11 +42,53 @@ img {
     margin-bottom: 35px;
     margin-left: 10px;
     white-space: nowrap;
+    animation:a 15s infinite ;
+}
+ @keyframes a{
+    0%   { color: #1ed71e; }   /* neon green */
+    14%  { color: #00e5ff; }   /* cyan */
+    28%  { color: #3d8bff; }   /* blue */
+    42%  { color: #b24dff; }   /* purple */
+    49%  {color: rgb(195, 47, 47);}
+    57%  { color: #ff3df2; }   /* pink */
+    71%  { color: #ff9a3d; }   /* orange */
+    85%  { color: #ffe83d; }   /* yellow */
+    100% { color: #1ed71e; }   /* back to green */
 }
 
 .s {
     font-size: 102px;
     text-shadow: 0 0 10px #14e878, 0 0 25px #14e878;
+    animation: ts 15s infinite;
+}
+ @keyframes ts{
+    0%   { text-shadow:
+        0 0 10px #14e878,
+        0 0 25px #14e878; }   /* neon green */
+    14%  {  text-shadow:
+        0 0 10px #00e5ff,
+        0 0 25px #00e5ff;}   /* cyan */
+    28%  {  text-shadow:
+        0 0 10px #3d8bff,
+        0 0 25px #3d8bff;}   /* blue */
+    42%  {  text-shadow:
+        0 0 10px #b24dff,
+        0 0 25px #b24dff; }   /* purple */
+    49%  {text-shadow:
+        0 0 10px rgb(195, 47, 47),
+        0 0 25px rgb(195, 47, 47);}
+    57%  {  text-shadow:
+        0 0 10px #ff3df2,
+        0 0 25px #ff3df2;}   /* pink */
+    71%  { text-shadow:
+        0 0 10px #ff9a3d,
+        0 0 25px #ff9a3d; }   /* orange */
+    85%  { text-shadow:
+        0 0 10px #ffe83d,
+        0 0 25px #ffe83d;}   /* yellow */
+    100% {text-shadow:
+        0 0 10px #1ed71e,
+        0 0 25px #1ed71e; }   /* back to green */
 }
 
 .search,
