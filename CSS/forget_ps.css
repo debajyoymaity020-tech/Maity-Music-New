@@ -3,7 +3,20 @@ html{
     border-radius: none !important;
     background-color: none !important;
 }
+.show{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+}
 body{
+    padding: 0;
+    margin: 0;
+    background-color: black;
+    overflow-x: hidden;
+}
+main{
     min-height: 100vh;
     background:
         radial-gradient(circle at 15% 20%, #043d26 0%, transparent 30%),
@@ -13,13 +26,17 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     color: white;
     position: relative;
+    overflow-x: hidden;
+    align-items: center;
+    text-align: center;
+    
 }
 .box{
     /* height: 80vh; */
     width: 40%;
     border: 1px solid #1ed760;
     margin-top: 5%;
-    margin-left: 32%;
+    margin-left: 30%;
     border-radius: 8%;
     box-shadow: 0 0 7px #1ed760,
     0 0 10px #1ed760;
@@ -138,13 +155,14 @@ p{
 #message{
     position: absolute;
     top: -8%;
-    left: 41%;
+    /* left: 5%; */
     background-color: #1ed760;
     padding: 2px 8px;
     border-radius: 18px;
     display: none;
-    text-shadow: 0 0 10px black,
-    0 0 20px black;
+    text-shadow: 0 0 10px white,
+    0 0 20px #1ed760;
+    color: black;
 }
 @media(max-width:820px){
     .box{
@@ -188,7 +206,7 @@ p{
     padding: 2% 3%;
    }
    body{
-    display: flex;
+    /* display: flex; */
     align-items: center;
     justify-content: center;
 
@@ -199,5 +217,29 @@ p{
     align-items: center;
     justify-content: center;
    } */
+
+   #message{
+    position: absolute;
+    top: 4%;
+    left: 1%;
+    background-color: #1ed760;
+    padding: 2px 8px;
+    border-radius: 18px;
+    display: none;
+    text-shadow: 0 0 10px black,
+    0 0 20px black;
+    font-size: 13px;
+    
+    text-shadow: 0 0 10px white,
+    0 0 20px #1ed760;
+    
+}
+.show{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: sticky;
+    top: 0;
+}
 }
 
