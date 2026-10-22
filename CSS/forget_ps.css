@@ -17,7 +17,6 @@ body{
     overflow-x: hidden;
 }
 main{
-    min-height: 100vh;
     background:
         radial-gradient(circle at 15% 20%, #043d26 0%, transparent 30%),
         radial-gradient(circle at 90% 10%, #075a31 0%, transparent 35%),
