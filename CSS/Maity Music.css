@@ -1677,7 +1677,7 @@ html.light .time{ color: #666; }
 html.light .c{ border-color: transparent; }
 /* player */
 html.light .player{
-    background: #ffffff;
+    background: #d6e2da;
     border-top: 1px solid #ddd;
 }
 html.light .ex-btn,
