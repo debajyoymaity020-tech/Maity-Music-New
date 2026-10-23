@@ -680,7 +680,7 @@ body{
 .des1{
     font-size: 18px;
     margin-top: 10px;
-    width: 260px;
+    /* width: 260px; */
     font-family: monospace;
 }
 .des2{
