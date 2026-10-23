@@ -678,9 +678,10 @@ body{
     width: 0%;
 }
 .des1{
-    font-size: 20px;
+    font-size: 18px;
     margin-top: 10px;
     width: 260px;
+    font-family: monospace;
 }
 .des2{
     font-size: 16px;
