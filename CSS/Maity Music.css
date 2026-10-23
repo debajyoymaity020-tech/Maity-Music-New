@@ -2000,3 +2000,18 @@ html.light .volume button:hover{ color: #000; }
         box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
     }
 }
+
+
+/* ================================================= */
+/*  Song list play/pause SVG icon (sob device e same) */
+/* ================================================= */
+.play{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+}
+.play svg{
+    display: block;
+    pointer-events: none;
+}

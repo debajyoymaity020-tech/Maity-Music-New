@@ -188,15 +188,19 @@ nextBtn.addEventListener('click', function () { changeSong(1); });
 prevBtn.addEventListener('click', function () { changeSong(-1); });
 audio.addEventListener('ended', function () { changeSong(1); });
 
-// ================= ▶ / ⏸ ICON =================
+// ================= ▶ / ⏸ ICON (SVG, sob device e same) =================
+const ICON_PLAY  = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M8 5v14l11-7z"/></svg>';
+const ICON_PAUSE = '<svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor" aria-hidden="true"><path d="M6 5h4v14H6zM14 5h4v14h-4z"/></svg>';
+
 function updateButtons() {
     songs.forEach(function (song, index) {
         const btn = song.querySelector('.play');
-        btn.textContent = (index === currentIndex && !audio.paused) ? '⏸' : '▶';
+        btn.innerHTML = (index === currentIndex && !audio.paused) ? ICON_PAUSE : ICON_PLAY;
     });
 }
 audio.addEventListener('play', updateButtons);
 audio.addEventListener('pause', updateButtons);
+updateButtons(); // page load e sob ▶ ke SVG kore dibe
 
 // ================= PICTURE IN PICTURE (Spotify style mini player) =================
 const pipBtn  = document.getElementById('pipBtn');
@@ -219,7 +223,7 @@ const PIP_CSS = `
     .bar{ display:flex; align-items:center; gap:8px; font-size:11px; color:#b3b3b3; }
     .bar input{ flex:1; accent-color:#1ed760; height:4px; cursor:pointer; }
     .ctrl{ display:flex; align-items:center; justify-content:center; gap:22px; }
-    .ctrl button{ background:none; border:none; color:#fff; font-size:22px; cursor:pointer; transition:.15s; }
+    .ctrl button{ background:none; border:none; color:#fff; font-size:22px; cursor:pointer; transition:.15s; display:flex; align-items:center; justify-content:center; }
     .ctrl button:hover{ color:#1ed760; transform:scale(1.15); }
     .ctrl .pp{ width:46px; height:46px; border-radius:50%; background:#1ed760; color:#000; font-size:20px; }
     .ctrl .pp:hover{ color:#000; background:#3be477; }
@@ -234,7 +238,7 @@ function updatePip() {
     pipEl('pi-img').src = pImg.src;
     pipEl('pi-title').textContent  = pTitle.textContent;
     pipEl('pi-artist').textContent = pArtist.textContent;
-    pipEl('pi-play').textContent   = audio.paused ? '▶' : '⏸';
+    pipEl('pi-play').innerHTML     = audio.paused ? ICON_PLAY : ICON_PAUSE;
 }
 
 function updatePipTime() {
@@ -277,9 +281,9 @@ async function openPip() {
                 '<input type="range" id="pi-seek" min="0" max="0" step="0.1" value="0">' +
                 '<span id="pi-dur">0:00</span></div>' +
             '<div class="ctrl">' +
-                '<button id="pi-prev" title="Previous">⏮</button>' +
-                '<button id="pi-play" class="pp" title="Play / Pause">▶</button>' +
-                '<button id="pi-next" title="Next">⏭</button>' +
+                '<button id="pi-prev" title="Previous"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M6 5h2v14H6zM20 5v14L9 12z"/></svg></button>' +
+                '<button id="pi-play" class="pp" title="Play / Pause">' + ICON_PLAY + '</button>' +
+                '<button id="pi-next" title="Next"><svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor"><path d="M16 5h2v14h-2zM4 5l11 7-11 7z"/></svg></button>' +
             '</div>' +
         '</div>';
 
