@@ -424,3 +424,25 @@ document.addEventListener('DOMContentLoaded', function () {
         localStorage.removeItem('maityCurrentUser');
     });
 });
+(function () {
+        var toggle = document.getElementById('themeToggle');
+        var row    = document.getElementById('themeRow');
+        var text   = document.getElementById('themeText');
+        var root   = document.documentElement;
+        if (!toggle) return;
+
+        function apply(isDark) {
+            root.classList.toggle('light', !isDark);
+            toggle.checked = isDark;
+            if (text) text.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+            try { localStorage.setItem('mm-theme', isDark ? 'dark' : 'light'); } catch (e) {}
+        }
+
+        // Default = dark. Sudhu user light kore rakhle light thakbe.
+        apply(!root.classList.contains('light'));
+
+        toggle.addEventListener('change', function () { apply(toggle.checked); });
+
+        // menu toggle ba bondho hoye jawa atkate
+        if (row) row.addEventListener('click', function (e) { e.stopPropagation(); });
+    })();

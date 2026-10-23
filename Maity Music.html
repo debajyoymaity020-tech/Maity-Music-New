@@ -10,7 +10,17 @@
     <link rel="apple-touch-icon" href="images/M-icon-512.png">
     <link rel="icon" type="image/png" href="images/M-icon-512.png">
     <script src="java script/Maity_Music.js" defer></script>
-    <!-- Toast style (PiP message). Chaile eta Maity Music.css e move korte paro -->
+
+    <!-- THEME: page load hotei saved theme apply hobe (flash hobe na). Default = DARK -->
+    <script>
+        (function () {
+            try {
+                if (localStorage.getItem('mm-theme') === 'light') {
+                    document.documentElement.classList.add('light');
+                }
+            } catch (e) {}
+        })();
+    </script>
 </head>
 
 <body>
@@ -61,7 +71,16 @@
                     <a id="ps" href="#"><i class="bi bi-person-gear"></i> Profile Settings</a>
                     <!-- <a id="aa" href="M_Artist.html"><i class="fa-solid fa-user-tie"></i> All Artists</a> -->
                     <!-- <a href="#"><i class="bi bi-bell"></i> Notifications</a> -->
-                    <a href="#"><i class="bi bi-palette"></i> Theme</a>
+
+                    <!-- THEME TOGGLE (ON = Dark Mode + green slider, OFF = Light Mode) -->
+                    <label class="theme-row" id="themeRow" for="themeToggle">
+                        <span class="theme-label"><i class="bi bi-palette"></i> <span id="themeText">Dark Mode</span></span>
+                        <span class="switch">
+                            <input type="checkbox" id="themeToggle" checked aria-label="Dark mode">
+                            <span class="slider"></span>
+                        </span>
+                    </label>
+
                     <a href="#"><i class="bi bi-question-circle"></i> Help</a>
                     <div class="pm-divider"></div>
                     <a href="index.html" class="pm-logout"><i class="bi bi-box-arrow-right"></i> Logout</a>
@@ -429,5 +448,8 @@
 
     <div class="toast" id="toast"></div>
 </footer>
+
+<!-- THEME TOGGLE SCRIPT -->
+
 </body>
 </html>

@@ -674,8 +674,8 @@ body{
     width: 29%;
 }
 .des-down{
-    /* margin-left: 2%; */
-    width: 0%;
+    margin-left: 2%;
+    /* width: 0%; */
 }
 .des1{
     font-size: 20px;
@@ -1031,7 +1031,10 @@ gap: 100px;
     .exh{
         display: none;
     }
-   
+   .des-down{
+    /* margin-left: 2%; */
+    width: 0%;
+}
 
     /* =========================
        SIDEBAR → BOTTOM NAV
@@ -1513,4 +1516,188 @@ gap: 100px;
         display: inline-block;
     }
 
+}
+
+
+/* ================================================= */
+/*  THEME TOGGLE (profile menu) + LIGHT MODE          */
+/*  Default = DARK. html.light thakle LIGHT mode hobe */
+/* ================================================= */
+
+/* ---- Toggle row ---- */
+.theme-row{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 14px;
+    color: #fff;
+    cursor: pointer;
+    user-select: none;
+}
+.theme-row:hover{ background: #3a3a3a; }
+.theme-label{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ---- Switch ---- */
+.switch{
+    position: relative;
+    display: inline-block;
+    width: 42px;
+    height: 24px;
+    flex-shrink: 0;
+}
+/* global `input{}` style ke override korte hobe */
+.switch input{
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+    margin: 0;
+    padding: 0;
+    display: block;
+    box-shadow: none;
+    border: none;
+}
+.slider{
+    position: absolute;
+    inset: 0;
+    background: #555;
+    border-radius: 24px;
+    cursor: pointer;
+    transition: background .3s, box-shadow .3s;
+}
+.slider::before{
+    content: "";
+    position: absolute;
+    left: 3px;
+    top: 3px;
+    height: 18px;
+    width: 18px;
+    background: #fff;
+    border-radius: 50%;
+    transition: transform .3s;
+}
+/* ON = dark mode = GREEN slider */
+.switch input:checked + .slider{
+    background: #1ed760;
+    box-shadow: 0 0 8px rgba(30, 215, 96, .6);
+}
+.switch input:checked + .slider::before{
+    transform: translateX(18px);
+}
+.switch input:focus-visible + .slider{
+    outline: 2px solid #1ed760;
+    outline-offset: 2px;
+}
+
+/* ---- LIGHT MODE ---- */
+html.light body{
+    background-color: #f2f2f2;
+    color: #121212;
+}
+html.light .sb{
+    background-color: #ffffff;
+    box-shadow: 1px 0 0 #e0e0e0;
+}
+html.light .sb nav a,
+html.light .play-list a,
+html.light .play-list h3{
+    color: #555;
+}
+html.light .sb nav a:hover,
+html.light .play-list a:hover{
+    color: #000;
+    background: #ececec;
+}
+html.light main{
+    background: linear-gradient(#e4e4e4, #f5f5f5 500px);
+}
+html.light .left,
+html.light .right{
+    background-color: #e0e0e0;
+    color: #444;
+}
+html.light .left:hover,
+html.light .right:hover{
+    background-color: #1ed760;
+    color: #000;
+}
+html.light input{
+    background-color: #ffffff;
+    color: #111;
+}
+html.light .srcc{
+    background-color: #ffffff;
+    color: #111;
+}
+html.light .srcc:hover{
+    background-color: #1ed760;
+    color: #000;
+}
+html.light .my-profile{
+    background-color: #ffffff;
+    color: #111;
+}
+html.light .my-profile:hover{
+    background-color: #1ed768;
+    color: #000;
+}
+/* menu */
+html.light .profile-menu{
+    background: #ffffff;
+    color: #111;
+    box-shadow: 0 10px 30px rgba(0,0,0,.2);
+}
+html.light .profile-menu a{ color: #111; }
+html.light .profile-menu a:hover{ background: #eeeeee; }
+html.light .theme-row{ color: #111; }
+html.light .theme-row:hover{ background: #eeeeee; }
+html.light .pm-divider{ background: #ddd; }
+html.light .pm-logout{ color: #e03131 !important; }
+/* welcome card: green thakbe, text white */
+html.light .cr{ color: #fff; }
+/* cards */
+html.light .card{ background: #ffffff; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+html.light .card:hover{ background: #ececec; }
+html.light .ed{ color: #666; }
+/* recently played */
+html.light .ps{ background: #ffffff; }
+html.light .ps-all1:hover,
+html.light .ps-all2:hover,
+html.light .ps-all3:hover{ background: #ececec; }
+html.light .perfect{ background: #ddd; }
+html.light .number,
+html.light .des2,
+html.light .time{ color: #666; }
+html.light .c{ border-color: transparent; }
+/* player */
+html.light .player{
+    background: #ffffff;
+    border-top: 1px solid #ddd;
+}
+html.light .ex-btn,
+html.light .ex-btn1{ color: #555; }
+html.light .ex-btn:hover,
+html.light .ex-btn1:hover{ color: #000; }
+html.light .pre,
+html.light .post{
+    border-color: #999;
+}
+html.light .toast{
+    background: #ffffff;
+    color: #111;
+    box-shadow: 0 4px 14px rgba(0,0,0,.2);
+}
+/* mobile bottom nav */
+@media (max-width: 768px){
+    html.light .sb{
+        background: #ffffff;
+        box-shadow: 0 -1px 0 #ddd;
+    }
 }
