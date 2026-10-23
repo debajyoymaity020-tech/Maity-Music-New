@@ -529,7 +529,7 @@ body{
     color: black;
 }
 .play1:active{
-    zoom: 85%;
+    zoom: 97%;
 }
 .play1:hover{
     box-shadow: 0 0 10px white,
@@ -1292,6 +1292,8 @@ gap: 100px;
         padding: 10px;
 
         border-radius: 10px;
+        height: 210px;
+        margin-top: 2%;
     }
 
     .cover1,
@@ -1309,8 +1311,9 @@ gap: 100px;
     }
 
     .per {
-        font-size: 17px;
+        font-size: 14.5px;
         margin-left: 5px;
+        width: 90%;
     }
 
     .ed {
@@ -1474,6 +1477,9 @@ gap: 100px;
     .min,
     .plas {
         display: none;
+    }
+    .store{
+        margin-top: 8%;
     }
 
 }
