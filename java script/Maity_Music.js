@@ -446,3 +446,102 @@ document.addEventListener('DOMContentLoaded', function () {
         // menu toggle ba bondho hoye jawa atkate
         if (row) row.addEventListener('click', function (e) { e.stopPropagation(); });
     })();
+     (function () {
+        var toggle = document.getElementById('themeToggle');
+        var row    = document.getElementById('themeRow');
+        var text   = document.getElementById('themeText');
+        var root   = document.documentElement;
+        if (!toggle) return;
+
+        function apply(isDark) {
+            root.classList.toggle('light', !isDark);
+            toggle.checked = isDark;
+            if (text) text.textContent = isDark ? 'Dark Mode' : 'Light Mode';
+            try { localStorage.setItem('mm-theme', isDark ? 'dark' : 'light'); } catch (e) {}
+        }
+
+        // Default = dark. Sudhu user light kore rakhle light thakbe.
+        apply(!root.classList.contains('light'));
+
+        toggle.addEventListener('change', function () { apply(toggle.checked); });
+
+        // menu toggle ba bondho hoye jawa atkate
+        if (row) row.addEventListener('click', function (e) { e.stopPropagation(); });
+    })();
+     (function () {
+        var a    = document.getElementById('main-audio');
+        var play = document.getElementById('plPlay');
+        var seek = document.getElementById('seekBar');
+        var cur  = document.getElementById('curTime');
+        var dur  = document.getElementById('durTime');
+        var vol  = document.getElementById('volBar');
+        var vBtn = document.getElementById('volBtn');
+        if (!a || !play || !seek) return;
+
+        var seeking = false;
+
+        function fmt(s) {
+            if (!isFinite(s) || s < 0) return '0:00';
+            s = Math.floor(s);
+            return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+        }
+        function paint(el) {
+            var p = (el.value - el.min) / (el.max - el.min) * 100;
+            el.style.setProperty('--pct', p + '%');
+        }
+        function setIcon() {
+            play.classList.toggle('playing', !a.paused && !a.ended);
+        }
+
+        play.addEventListener('click', function () {
+            if (a.paused) { a.play().catch(function () {}); } else { a.pause(); }
+        });
+        a.addEventListener('play', setIcon);
+        a.addEventListener('playing', setIcon);
+        a.addEventListener('pause', setIcon);
+        a.addEventListener('ended', setIcon);
+
+        function setDur() { dur.textContent = fmt(a.duration); }
+        a.addEventListener('loadedmetadata', setDur);
+        a.addEventListener('durationchange', setDur);
+        a.addEventListener('emptied', function () {
+            seek.value = 0; paint(seek); cur.textContent = '0:00'; dur.textContent = '0:00';
+        });
+
+        a.addEventListener('timeupdate', function () {
+            if (seeking || !a.duration) return;
+            seek.value = (a.currentTime / a.duration) * 100;
+            paint(seek);
+            cur.textContent = fmt(a.currentTime);
+        });
+
+        seek.addEventListener('input', function () {
+            seeking = true;
+            paint(seek);
+            if (a.duration) cur.textContent = fmt(seek.value / 100 * a.duration);
+        });
+        seek.addEventListener('change', function () {
+            if (a.duration) a.currentTime = seek.value / 100 * a.duration;
+            seeking = false;
+        });
+
+        // volume (desktop)
+        if (vol && vBtn) {
+            vol.addEventListener('input', function () {
+                a.volume = parseFloat(vol.value);
+                a.muted = a.volume === 0;
+                paint(vol);
+            });
+            vBtn.addEventListener('click', function () { a.muted = !a.muted; });
+            a.addEventListener('volumechange', function () {
+                var off = a.muted || a.volume === 0;
+                vBtn.innerHTML = '<i class="bi ' + (off ? 'bi-volume-mute-fill' : 'bi-volume-up-fill') + '"></i>';
+                if (!a.muted) { vol.value = a.volume; paint(vol); }
+            });
+            paint(vol);
+        }
+
+        paint(seek);
+        setDur();
+        setIcon();
+    })();
