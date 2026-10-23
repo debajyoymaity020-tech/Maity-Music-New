@@ -1501,13 +1501,14 @@ gap: 100px;
 @media(max-width:700px){
      .logo-mobile{
         display: inline-block;
-        font-size: 20px;
+        font-size: 23px;
         margin-bottom: 0;
-		margin-left: 7%;
+		margin-left: 2%;
+        text-shadow: 0 0 2px black, 0 0 5px black;
 
     }
     .s1{
-        font-size: 30px;
+        font-size: 42px;
     }
     .src-lite{
         display: inline-block;
@@ -1917,70 +1918,82 @@ html.light .volume button:hover{ color: #000; }
 
 
 /* ================================================= */
-/*  MOBILE: seek bar + tap-to-open volume slider      */
+/*  DESKTOP: .vol-pop ke inline rakho                 */
+/* ================================================= */
+.vol-pop{ display: contents; }
+
+/* ================================================= */
+/*  MOBILE: seek bar + vertical volume popup          */
 /* ================================================= */
 @media (max-width: 768px){
 
-    /* seek bar ektu mota, thumb boro (touch-er jonno) */
+    /* popup bahire berobe, tai clip hobe na */
+    .player{ overflow: visible; }
+
+    /* seek bar: mota + boro thumb (touch-er jonno) */
+    .pl-seek{ gap: 8px; }
     .pl-seek input[type=range]{
+        display: block;
         height: 6px;
         border-radius: 6px;
-        display: block;
         touch-action: none;
     }
-    .pl-seek input[type=range]::-webkit-slider-thumb{
-        width: 18px;
-        height: 18px;
-    }
-    .pl-seek input[type=range]::-moz-range-thumb{
-        width: 18px;
-        height: 18px;
-    }
-    .pl-seek{ gap: 8px; }
+    .pl-seek input[type=range]::-webkit-slider-thumb{ width: 18px; height: 18px; }
+    .pl-seek input[type=range]::-moz-range-thumb{ width: 18px; height: 18px; }
 
-    /* volume icon: player-er dan-upore kone */
+    /* sound icon: player-er dan-upore kone */
     .player .volume{
-        display: flex;
-        flex-direction: row-reverse;   /* icon dan dike, slider tar bam dike khulbe */
-        align-items: center;
+        display: block;
         position: absolute;
         top: 6px;
         right: 12px;
         width: auto;
         margin: 0;
-        padding: 4px 6px;
-        gap: 8px;
-        border-radius: 20px;
-        background: #181818;
+        padding: 0;
+        background: transparent;
         z-index: 3;
     }
     .player .volume button{
-        font-size: 24px;
+        font-size: 26px;
         color: #fff;
         padding: 2px;
     }
-    /* slider default-e lukano, icon e tap korle khulbe */
-    .player .volume input[type=range]{
-        display: none;
-        flex: none;
-        width: 130px;
-        height: 6px;
-    }
-    .player .volume.open input[type=range]{
-        display: block;
-    }
-    .player .volume input[type=range]::-webkit-slider-thumb{
-        width: 18px;
-        height: 18px;
-    }
-    .player .volume input[type=range]::-moz-range-thumb{
-        width: 18px;
-        height: 18px;
-    }
-
-    /* naam-er text volume icon-er niche jeno na dhoke */
     .des-down{ padding-right: 44px; box-sizing: border-box; }
 
-    html.light .player .volume{ background: #ffffff; }
+    /* lombalombi slider panel: icon-e tap korle icon-er upore khulbe */
+    .vol-pop{
+        display: none;
+        position: absolute;
+        bottom: calc(100% + 10px);
+        right: -4px;
+        width: 46px;
+        height: 160px;
+        background: #282828;
+        border-radius: 23px;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .55);
+    }
+    .volume.open .vol-pop{ display: block; }
+
+    /* range input ke ghurie lombalombi kora (niche = 0, upore = max) */
+    .player .volume input[type=range]{
+        display: block;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 124px;
+        height: 6px;
+        margin: 0;
+        flex: none;
+        transform: translate(-50%, -50%) rotate(-90deg);
+        touch-action: none;
+    }
+    .player .volume input[type=range]::-webkit-slider-thumb{ width: 18px; height: 18px; }
+    .player .volume input[type=range]::-moz-range-thumb{ width: 18px; height: 18px; }
+
+    /* light mode */
     html.light .player .volume button{ color: #111; }
+    html.light .vol-pop{
+        background: #ffffff;
+        box-shadow: 0 6px 18px rgba(0, 0, 0, .25);
+    }
 }

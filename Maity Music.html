@@ -425,7 +425,9 @@
     <audio class="aud" id="main-audio" src="Audio/mm.mp3" preload="metadata"></audio>
     <div class="volume">
         <button id="volBtn" aria-label="Mute"><i class="bi bi-volume-up-fill"></i></button>
-        <input type="range" id="volBar" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+        <div class="vol-pop">
+            <input type="range" id="volBar" min="0" max="1" step="0.01" value="1" aria-label="Volume">
+        </div>
     </div>
 
     <div class="bit">
@@ -463,13 +465,5 @@
 
     <div class="toast" id="toast"></div>
 </footer>
-
-<!-- CUSTOM PLAYER SCRIPT -->
-<script>
-   
-</script>
-
-<!-- THEME TOGGLE SCRIPT -->
-
 </body>
 </html>
