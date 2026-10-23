@@ -674,8 +674,8 @@ body{
     width: 29%;
 }
 .des-down{
-    margin-left: 2%;
-    width: 19%;
+    /* margin-left: 2%; */
+    width: 0%;
 }
 .des1{
     font-size: 20px;
@@ -1445,7 +1445,7 @@ gap: 100px;
     }
 
     .aud {
-        min-width: 0;
+        min-width: 68%;
         flex: 1;
 
         margin-left: 0;
@@ -1465,7 +1465,7 @@ gap: 100px;
 
         font-size: 18px;
 
-        margin-left: 8px;
+        margin-left: 0px;
     }
 
     .volume,
