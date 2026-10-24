@@ -1147,6 +1147,29 @@ form{
         text-align: center;
     }
 }
+/* @media screen and (max-height:650px){
+    .logo{
+        margin-top: 0px;
+    }
+    .pho{
+        height: 120px;
+        width: 120px;
+    }
+    .ima{
+        height: 120px;
+        width: 120px;
+        margin-top: 3px;
+    }
+    .input{
+        margin-top: 8px;
+    }
+    .leaf .mar{
+        margin-top: calc(5% + 8px);
+    }
+    .fp{
+        top: calc(65.9% - 11px);
+    }
+} */
 
 
 
