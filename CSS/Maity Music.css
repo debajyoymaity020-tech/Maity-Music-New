@@ -2022,3 +2022,166 @@ html.light .volume button:hover{ color: #000; }
     display: block;
     pointer-events: none;
 }
+
+
+/* ================================================= */
+/*  SEARCH DROPDOWN (keep this block at the END)      */
+/* ================================================= */
+.sr{ position: relative; z-index: 1200; }
+.sr-close{ display: none; }
+
+.sr-drop{
+    display: none;
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    width: 100%;
+    max-width: 620px;
+    max-height: min(60vh, 430px);
+    overflow-y: auto;
+    padding: 8px;
+    box-sizing: border-box;
+    background: rgba(18, 18, 18, .82);
+    -webkit-backdrop-filter: blur(16px) saturate(140%);
+    backdrop-filter: blur(16px) saturate(140%);
+    border: 1px solid rgba(255, 255, 255, .08);
+    border-radius: 14px;
+    box-shadow: 0 14px 40px rgba(0, 0, 0, .55);
+    color: #fff;
+    scrollbar-width: thin;
+}
+.sr-drop.show{ display: block; }
+
+.sd-head{
+    padding: 8px 10px 4px;
+    font-size: 12px;
+    letter-spacing: .04em;
+    color: #1ed760;
+}
+.sd-row{
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: background .15s;
+}
+.sd-row:hover{ background: rgba(255, 255, 255, .08); }
+.sd-row img{
+    width: 40px;
+    height: 40px;
+    flex-shrink: 0;
+    object-fit: cover;
+    border-radius: 6px;
+    background: #333;
+}
+.sd-text{ flex: 1; min-width: 0; }
+.sd-title{
+    font-size: 14px;
+    color: #fff;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sd-artist{
+    margin-top: 2px;
+    font-size: 12px;
+    color: #9a9a9a;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.sd-play{
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    background: #1ed760;
+    color: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: transform .15s, box-shadow .2s;
+}
+.sd-play:hover{ transform: scale(1.1); box-shadow: 0 0 10px rgba(30, 215, 96, .7); }
+.sd-play svg{ display: block; pointer-events: none; }
+.sd-empty{ padding: 14px 10px; font-size: 14px; color: #b3b3b3; }
+
+/* light mode */
+html.light .sr-drop{
+    background: rgba(255, 255, 255, .86);
+    color: #111;
+    border-color: rgba(0, 0, 0, .08);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, .18);
+}
+html.light .sd-row:hover{ background: rgba(0, 0, 0, .06); }
+html.light .sd-title{ color: #111; }
+html.light .sd-artist{ color: #666; }
+html.light .sd-head{ color: #14a84a; }
+html.light .sd-empty{ color: #666; }
+
+/* big screens (15" / 16" / 17" laptops, external monitors) */
+@media (min-width: 1500px){
+    .sr-drop{ max-width: 720px; max-height: min(60vh, 520px); }
+    .sd-title{ font-size: 15px; }
+    .sd-artist{ font-size: 13px; }
+    .sd-row img{ width: 44px; height: 44px; }
+}
+
+/* phone + tablet (up to 768px) */
+@media (max-width: 768px){
+    /* the search icon used to disappear between 700px and 768px; now it always shows */
+    .src-lite{ display: inline-block !important; cursor: pointer; padding: 10px; font-size: 18px; }
+
+    .sr.open{
+        position: fixed;
+        top: 0; left: 0; right: 0;
+        width: 100%;
+        margin: 0;
+        padding: 10px 12px;
+        box-sizing: border-box;
+        background: rgba(0, 0, 0, .9);
+        -webkit-backdrop-filter: blur(14px);
+        backdrop-filter: blur(14px);
+        z-index: 1500;
+    }
+    .sr.open form{ display: flex; align-items: center; gap: 8px; }
+    .sr.open #site-search{
+        display: block;
+        flex: 1;
+        width: auto;
+        min-width: 0;
+        height: 44px;
+        margin: 0;
+        padding: 0 14px;
+        font-size: 16px;
+    }
+    .sr.open .sr-close{
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 40px;
+        height: 40px;
+        flex-shrink: 0;
+        border: 1px solid #1ed760;
+        border-radius: 50%;
+        background: transparent;
+        color: #fff;
+        font-size: 16px;
+        cursor: pointer;
+    }
+    .sr.open .sr-drop{
+        top: calc(100% + 6px);
+        left: 12px;
+        right: 12px;
+        width: auto;
+        max-width: none;
+        max-height: min(55vh, 380px);
+    }
+    html.light .sr.open{ background: rgba(255, 255, 255, .92); }
+    html.light .sr.open .sr-close{ color: #111; }
+}

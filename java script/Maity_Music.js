@@ -253,7 +253,7 @@ function updatePipTime() {
 
 async function openPip() {
     if (!('documentPictureInPicture' in window)) {
-        showToast('Eta Chrome ba Edge (desktop) e kaj kore');
+        showToast('Mini player works in Chrome or Edge (desktop)');
         return;
     }
     if (pipWin) { pipWin.close(); return; }
@@ -262,7 +262,7 @@ async function openPip() {
         pipWin = await documentPictureInPicture.requestWindow({ width: 320, height: 440 });
     } catch (err) {
         console.error('PiP error:', err);
-        showToast('PiP chalu kora gelo na');
+        showToast('Could not start the mini player');
         return;
     }
 
@@ -566,4 +566,176 @@ document.addEventListener('DOMContentLoaded', function () {
     paint(seek);
     setDur();
     setIcon();
+})();
+
+
+// =====================================================================
+//  DYNAMIC SEARCH  -- keep this block at the very END of the file.
+//  It reads the song list (.ps) on every search, so any new song added
+//  to the HTML shows up automatically. Only songs that have a
+//  data-audio file are searchable and playable.
+// =====================================================================
+(function () {
+    var wrap   = document.getElementById('searchWrap');
+    var input  = document.getElementById('site-search');
+    var drop   = document.getElementById('searchDrop');
+    var form   = document.getElementById('searchForm');
+    var openB  = document.querySelector('.src-lite');
+    var closeB = document.getElementById('srClose');
+    if (!wrap || !input || !drop) return;
+
+    //<pure>
+    function norm(s) { return (s || '').toLowerCase().replace(/\s+/g, ' ').trim(); }
+
+    // "Arijit Singh, Chirantan Bhatt" -> separate artist names
+    function splitArtists(s) {
+        return (s || '').split(/,|&|\(|\)|\bfeaturing\b|\bfeat\.?\s|\sx\s/i)
+            .map(function (a) { return a.trim(); })
+            .filter(Boolean);
+    }
+
+    function runSearch(q, list) {
+        q = norm(q);
+        if (!q) return null;
+
+        var groups = [], byKey = {};
+        // artist groups start from 2 letters, so a single letter just lists matching song names
+        if (q.length >= 2) list.forEach(function (s) {
+            s.artists.forEach(function (a) {
+                var key = norm(a);
+                if (key.indexOf(q) === -1) return;
+                var g = byKey[key];
+                if (!g) { g = byKey[key] = { artist: a, items: [] }; groups.push(g); }
+                if (g.items.indexOf(s) === -1) g.items.push(s);
+            });
+        });
+        groups = groups.slice(0, 4);
+
+        var used = {};
+        groups.forEach(function (g) { g.items.forEach(function (s) { used[s.index] = true; }); });
+
+        var byTitle = list.filter(function (s) {
+            return !used[s.index] && norm(s.title).indexOf(q) !== -1;
+        });
+        return { songs: byTitle, groups: groups };
+    }
+    //</pure>
+
+    function collect() {
+        var out = [];
+        songs.forEach(function (el, i) {
+            if (!el.dataset.audio) return;                 // no audio file = not searchable
+            var t  = el.querySelector('.des1');
+            var a  = el.querySelector('.des2');
+            var im = el.querySelector('.image-in');
+            var artist = a ? a.textContent.trim() : '';
+            out.push({
+                index: i,
+                title: t ? t.textContent.trim() : '',
+                artist: artist,
+                artists: splitArtists(artist),
+                img: im ? im.src : ''
+            });
+        });
+        return out;
+    }
+
+    function isPlaying(i) { return i === currentIndex && !audio.paused; }
+
+    function toggleSong(i) {
+        if (i === currentIndex) { audio.paused ? audio.play() : audio.pause(); }
+        else { playSong(i); }
+    }
+
+    function makeRow(s) {
+        var r = document.createElement('div');
+        r.className = 'sd-row';
+        var im = document.createElement('img');
+        im.src = s.img; im.alt = '';
+        var tx = document.createElement('div');
+        tx.className = 'sd-text';
+        var t = document.createElement('div');
+        t.className = 'sd-title'; t.textContent = s.title;
+        var a = document.createElement('div');
+        a.className = 'sd-artist'; a.textContent = s.artist;
+        tx.appendChild(t); tx.appendChild(a);
+        var b = document.createElement('button');
+        b.type = 'button'; b.className = 'sd-play';
+        b.setAttribute('aria-label', 'Play ' + s.title);
+        b.dataset.index = s.index;
+        b.innerHTML = isPlaying(s.index) ? ICON_PAUSE : ICON_PLAY;
+        r.appendChild(im); r.appendChild(tx); r.appendChild(b);
+        r.addEventListener('click', function () { toggleSong(s.index); });
+        return r;
+    }
+
+    function makeHead(text) {
+        var h = document.createElement('div');
+        h.className = 'sd-head'; h.textContent = text;
+        return h;
+    }
+
+    function hideDrop() { drop.classList.remove('show'); }
+
+    function render() {
+        var res = runSearch(input.value, collect());
+        drop.textContent = '';
+        if (!res) { hideDrop(); return; }
+
+        if (!res.songs.length && !res.groups.length) {
+            var n = document.createElement('div');
+            n.className = 'sd-empty';
+            n.textContent = 'No songs found for "' + input.value.trim() + '"';
+            drop.appendChild(n);
+        }
+        if (res.songs.length) {
+            drop.appendChild(makeHead('Songs'));
+            res.songs.forEach(function (s) { drop.appendChild(makeRow(s)); });
+        }
+        res.groups.forEach(function (g) {
+            drop.appendChild(makeHead('Search songs for ' + g.artist));
+            g.items.forEach(function (s) { drop.appendChild(makeRow(s)); });
+        });
+        drop.classList.add('show');
+    }
+
+    function refreshIcons() {
+        drop.querySelectorAll('.sd-play').forEach(function (b) {
+            b.innerHTML = isPlaying(parseInt(b.dataset.index, 10)) ? ICON_PAUSE : ICON_PLAY;
+        });
+    }
+    audio.addEventListener('play', refreshIcons);
+    audio.addEventListener('pause', refreshIcons);
+
+    input.addEventListener('input', render);
+    input.addEventListener('focus', render);
+
+    // Enter plays the first result
+    form.addEventListener('submit', function (e) {
+        e.preventDefault();
+        render();
+        var first = drop.querySelector('.sd-row');
+        if (first) first.click();
+    });
+
+    // click outside closes the dropdown
+    document.addEventListener('click', function (e) {
+        if (!wrap.contains(e.target) && !(openB && openB.contains(e.target))) hideDrop();
+    });
+
+    // phone / tablet: tap the search icon to open the search bar
+    function closeBar() {
+        wrap.classList.remove('open');
+        hideDrop();
+        input.blur();
+    }
+    if (openB) openB.addEventListener('click', function () {
+        wrap.classList.add('open');
+        input.focus();
+        render();
+    });
+    if (closeB) closeB.addEventListener('click', closeBar);
+    document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape') closeBar();
+    });
 })();

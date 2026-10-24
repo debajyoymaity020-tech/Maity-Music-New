@@ -52,12 +52,17 @@
                 <button class="left"> < </button>
                 <button class="right">></button>
             </div>
-            <div class="sr">
-                <form action="/search" method="get">
-                    <input type="search" id="site-search" name="q" placeholder="Search...">
+
+            <!-- SEARCH: dynamic, reads the song list below -->
+            <div class="sr" id="searchWrap">
+                <form id="searchForm" action="#" autocomplete="off">
+                    <input type="search" id="site-search" name="q" placeholder="Search songs or artists..." autocomplete="off">
                     <button class="srcc" type="submit">Search</button>
+                    <button class="sr-close" id="srClose" type="button" aria-label="Close search">✕</button>
                 </form>
+                <div class="sr-drop" id="searchDrop"></div>
             </div>
+
 	<div class="logo-mobile"><span class="rotate">M</span><span class="rotate">a</span><span class="rotate">i</span><span class="rotate">t</span><span class="rotate">y</span><sub class="s1">♫</sub><span class="rotate">M</span><span class="rotate">u</span><span class="rotate">s</span><span class="rotate">i</span><span class="rotate">c</span></div>
 
             <div class="src-lite"> <i class="fa-solid fa-magnifying-glass"></i></div>
@@ -257,7 +262,7 @@
                         <div class="number">9</div>
                         <div class="perfect"><img class="image-in" src="images/dekhna.jpg" alt=""></div>
                         <div class="des">
-                            <div class="des1"><b>দেখনা ও রসিয়া Remix</b></div>
+                            <div class="des1"><b>Dekhna O Rosiya Remix</b></div>
                             <div class="des2">Mixer - Subha Ka Muzik </div>
                         </div>
                         <span class="time">0:00</span>
@@ -301,7 +306,7 @@
                         <div class="number">13</div>
                         <div class="perfect"><img class="image-in" src="images/sadher lau.jpg" alt=""></div>
                         <div class="des">
-                            <div class="des1"><b>সাধের লাউ বানাইলো মোরে </b></div>
+                            <div class="des1"><b>Sadher Lau Banailo More</b></div>
                             <div class="des2">Mixer - Subha Ka Muzik</div>
                         </div>
                         <span class="time">0:00</span>
@@ -312,7 +317,7 @@
                         <div class="number">14</div>
                         <div class="perfect"><img class="image-in" src="images/kamala1.jpeg" alt=""></div>
                         <div class="des">
-                            <div class="des1"><b>কমলায় নৃত্য করে</b></div>
+                            <div class="des1"><b>Komolay Nritya Kore</b></div>
                             <div class="des2">Ankita Bhattacharyya</div>
                         </div>
                         <span class="time">0:00</span>
