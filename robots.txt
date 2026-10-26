@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://debajyoymaity020-tech.github.io/Maity-Music-New/sitemap.xml

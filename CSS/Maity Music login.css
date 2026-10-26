@@ -276,6 +276,12 @@ form{ margin:0; }
     box-shadow:var(--inset);
     text-align:left;
     transition:box-shadow .25s;
+    border: 2px solid transparent;
+}
+.input:hover{
+    /* border: 2px solid var(--violet); */
+    box-shadow: 0 0 5px var(--violet),0 0 10px var(--violet);
+    
 }
 .input:focus-within{ box-shadow:var(--inset), 0 0 0 2px var(--violet); }
 .input > span{
@@ -429,7 +435,7 @@ form{ margin:0; }
     transition:box-shadow .2s, color .2s;
 }
 .social a:hover{ box-shadow:var(--inset); }
-.social a:nth-of-type(1):hover{ color:#ea4335; }
+.social a:nth-of-type(1):hover{ color:#35e1ea; }
 .social a:nth-of-type(2):hover{ color:#000; }
 .social a:nth-of-type(3):hover{ color:#1877f2; }
 

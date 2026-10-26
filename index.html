@@ -8,10 +8,32 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link rel="apple-touch-icon" href="images/M-icon-512.png">
     <link rel="icon" type="image/png" href="images/M-icon-512.png">
-    <title>Maity Music - Free Online Music Player by Debajyoti</title>
-<meta name="description" content="Maity Music is a web music player made by Debajyoti Maity. Listen to songs online with a Spotify-style player, dark and light mode.">
-<meta name="robots" content="index, follow">
-<link rel="canonical" href="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
+
+    <!-- ===== SEO ===== -->
+    <title>Maity Music - Free Music Website | Listen to Songs Online</title>
+    <meta name="description" content="Maity Music is a free music website to listen to songs online. Spotify-style web music player with dark and light mode, made by Debajyoti Maity.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
+
+    <!-- Social share tags -->
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Maity Music">
+    <meta property="og:title" content="Maity Music - Free Music Website">
+    <meta property="og:description" content="Listen to songs online on Maity Music, a free web music player.">
+    <meta property="og:url" content="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
+    <meta property="og:image" content="https://debajyoymaity020-tech.github.io/Maity-Music-New/images/M-icon-512.png">
+
+    <!-- Structured data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Maity Music",
+      "alternateName": ["Maity Music Player", "Maity Music Free Music Website"],
+      "url": "https://debajyoymaity020-tech.github.io/Maity-Music-New/"
+    }
+    </script>
+
     <!-- OTP email pathanor jonno (EmailJS) -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
 
@@ -144,9 +166,33 @@
             opacity: 0.6;
             cursor: not-allowed;
         }
+
+        /* ===== SEO text ===== */
+        .seo-hidden{
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+            clip: rect(0 0 0 0);
+            white-space: nowrap;
+        }
+        .seo-text{
+            max-width: 700px;
+            margin: 20px auto;
+            padding: 0 16px 30px;
+            text-align: center;
+            color: #d7d7d7;
+            font-size: 14px;
+        }
+        .seo-text h2{
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
     </style>
 </head>
 <body>
+    <h1 class="seo-hidden">Maity Music - Free Music Website</h1>
+
     <main class="book">
 
         <!-- Hidden checkbox: Sign Up / Back label gula eta ke tick-untick kore, tai page ulte jay -->
@@ -240,7 +286,7 @@
                             <div class="logo"> <b s class="wh">Maity</b> <sub class="s1">♫</sub> <b class="wh">Music</b></div>
                             <div class="lis">Login to continue your music journey</div>
                             <div class="ima">
-                                <div class="pho"> <img src="images/ll.webp" alt=""></div>
+                                <div class="pho"> <img src="images/ll.webp" alt="Maity Music free music website login"></div>
                             </div>
                             <form action="" id="login-form">
                                 <div class="input">
@@ -286,6 +332,11 @@
             </div>
         </div>
     </main>
+
+    <section class="seo-text">
+        <h2>Free online music player</h2>
+        <p>Maity Music is a free music website where you can listen to songs online. It has a Spotify-style player with dark and light mode, made by Debajyoti Maity.</p>
+    </section>
 
 <script>
     const flip = document.getElementById('flip');
