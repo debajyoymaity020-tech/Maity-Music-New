@@ -386,6 +386,7 @@ body{
         position: sticky;
         top: 0;
         left: 0;
+        padding: 0% 2% 1%;
     }
     .card{
         width: 180px;
@@ -396,10 +397,13 @@ body{
         transition: 0.3s; 
         min-width: 180px;
         cursor: pointer;
+        margin-top: 2%;
     }
     .card:hover{
          background: #282828;
     transform: translateY(-9px);
+    box-shadow: 0 0 3px whitesmoke,
+    0 0 20px violet;
     }
     .cover{
         height: 50px;
@@ -444,54 +448,73 @@ body{
     }
 
     .cover1 {
-    background: #34568b;
+    background-image: url(../images/Ed_Sheeran_Perfect.jpg);
+    background-position: center;
+    background-size: cover;
     height: 150px;
     width: 150px;
     margin-top: 10px;
     margin-left: 10px;
-    animation: c1 8s infinite;
+    /* animation: c1 8s infinite; */
 }  .cover2 {
-    background: #8b345d;
+     background-image: url(../images/lovestory_url.jpeg);
+    background-position: center;
+    background-size: cover;
     height: 150px;
     width: 150px;
     margin-top: 10px;
     margin-left: 10px;
-    animation: c2 5s infinite;
+    /* animation: c2 5s infinite; */
 }  .cover3 {
-    background: #34348b;
+    /* background: #34348b; */
+    background-image: url(../images/nightvives.jpg);
+     background-position: center;
+    background-size: cover;
     height: 150px;
     width: 150px;
     margin-top: 10px;
-    animation: c3 8s infinite;
+    /* animation: c3 8s infinite; */
     margin-left: 10px;
 }  .cover4 {
-    background: #8b4e34;
+     background-image: url(../images/tranding.jpg);
+     background-position: center;
+    background-size: cover;
+    /* background: #8b4e34; */
     height: 150px;
     width: 150px;
-    animation: c4 5s infinite;
+    /* animation: c4 5s infinite; */
     margin-top: 10px;
     margin-left: 10px;
 }  .cover5 {
-    background: #348b72;
+     background-image: url(../images/chilvives.jpeg);
+     background-position: center;
+    background-size: cover;
+    /* background: #348b72; */
     height: 150px;
     width: 150px;
-    animation: c5 8s infinite;
+    /* animation: c5 8s infinite; */
     margin-top: 10px;
     margin-left: 10px;
 }.cover6 {
-    background: #1db9ac;
+      background-image: url(../images/bhojpuri_mishup.jpg);
+     background-position: center;
+    background-size: cover;
+    /* background: #1db9ac; */
     height: 150px;
     width: 150px;
-    animation: c6 8s infinite;
+    /* animation: c6 8s infinite; */
     margin-top: 10px;
     margin-left: 10px;
 }
 .cover7 {
-    background: rgb(22, 51, 105);
+      background-image: url(../images/break_up.jpeg);
+     background-position: center;
+    background-size: cover;
+    /* background: rgb(22, 51, 105); */
     height: 150px;
     width: 150px;
     margin-top: 10px;
-    animation: c7 5s infinite;
+    /* animation: c7 5s infinite; */
     margin-left: 10px;
 
 }
@@ -1606,6 +1629,10 @@ gap: 100px;
 html.light body{
     background-color: #f2f2f2;
     color: #121212;
+}
+html.light .card:hover{
+     box-shadow: 0 0 6px #111,
+    0 0 20px violet;
 }
 html.light .sb{
     background-color: #ffffff;
