@@ -1813,7 +1813,7 @@ html.light .toast{
     padding: 0;
     border: none;
     border-radius: 50%;
-    background: #1ed760;
+    /* background: #1ed760; */
     color: #000;
     font-size: 28px;
     display: flex;
