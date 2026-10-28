@@ -630,10 +630,12 @@ body{
     border-top-left-radius: 16px;
     border-top-right-radius: 16px;
     overflow-y: auto;
+    /* border: 0.1px transparent; */
 }
 .ps-all1:hover{
     background: #282828;
     transition: all ease-in-out 0.2s;
+    /* border: 0.1px solid violet; */
 }
 .ps-all2{
     /* height: 9.3vh; */
@@ -642,11 +644,14 @@ body{
     align-items: center;
     /* border-radius: 16px; */
     margin-top: 1.2%;
+    /* border: 0.1px transparent; */
     
 }
 .ps-all2:hover{
     background: #282828;
-    transition: all ease-in-out 0.2s;
+    transition: all ease-in-out 0.1s;
+    /* box-shadow: 0 0 10px rgb(0, 0, 0), 0 0 10px violet; */
+    /* border: 0.1px solid rgb(127, 41, 127); */
 }
 .ps-all3{
     /* height: 9.3vh; */
