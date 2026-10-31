@@ -212,24 +212,72 @@ function showToast(msg) {
     setTimeout(function () { toastEl.classList.remove('show'); }, 2500);
 }
 
+// PiP window er CSS: main page er moto login-theme. Light default, :root.dark = dark
 const PIP_CSS = `
+    :root{
+        --a1:#8b3dff; --a2:#4a86f0;
+        --grad:linear-gradient(120deg,#8b3dff,#4a86f0);
+        --bg:#e6e9f2; --sh-light:#ffffff; --sh-dark:#c5c9d9;
+        --text:#1c1f3a; --muted:#8a8ca5; --track:#c5c9d9;
+        --glow:rgba(139,61,255,.35);
+    }
+    :root.dark{
+        --bg:#1e2140; --sh-light:#282c55; --sh-dark:#13152b;
+        --text:#e9ebfa; --muted:#9a9dc3; --track:#2f3363;
+        --glow:rgba(139,61,255,.45);
+    }
     *{ box-sizing:border-box; margin:0; padding:0; }
-    body{ background:#121212; color:#fff; font-family:Arial,sans-serif; overflow:hidden; }
+    body{ background:var(--bg); color:var(--text); font-family:Arial,sans-serif; overflow:hidden; transition:background .3s; }
     .pw{ display:flex; flex-direction:column; height:100vh; padding:14px; gap:10px; }
     .cover{ flex:1; min-height:0; display:flex; align-items:center; justify-content:center; }
-    .cover img{ max-width:100%; max-height:100%; aspect-ratio:1/1; object-fit:cover; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,.6); }
-    .pt{ font-size:17px; font-weight:bold; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-    .pa{ font-size:13px; color:#b3b3b3; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:-4px; }
-    .bar{ display:flex; align-items:center; gap:8px; font-size:11px; color:#b3b3b3; }
-    .bar input{ flex:1; accent-color:#1ed760; height:4px; cursor:pointer; }
+    .cover img{ max-width:100%; max-height:100%; aspect-ratio:1/1; object-fit:cover; border-radius:14px; box-shadow:6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light); }
+    .pt{ font-size:17px; font-weight:bold; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .pa{ font-size:13px; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:-4px; }
+    .bar{ display:flex; align-items:center; gap:8px; font-size:11px; color:var(--muted); }
+    .bar input{
+        -webkit-appearance:none; appearance:none; flex:1; height:4px; border-radius:4px;
+        cursor:pointer; outline:none;
+        background:linear-gradient(90deg,#8b3dff,#4a86f0) 0 0 / var(--pct,0%) 100% no-repeat, var(--track);
+    }
+    .bar input::-webkit-slider-thumb{
+        -webkit-appearance:none; width:14px; height:14px; border-radius:50%;
+        background:var(--a1); box-shadow:0 0 6px var(--glow);
+    }
+    .bar input::-moz-range-thumb{
+        width:14px; height:14px; border:none; border-radius:50%;
+        background:var(--a1); box-shadow:0 0 6px var(--glow);
+    }
+    .bar input::-moz-range-track{ background:transparent; }
     .ctrl{ display:flex; align-items:center; justify-content:center; gap:22px; }
-    .ctrl button{ background:none; border:none; color:#fff; font-size:22px; cursor:pointer; transition:.15s; display:flex; align-items:center; justify-content:center; }
-    .ctrl button:hover{ color:#1ed760; transform:scale(1.15); }
-    .ctrl .pp{ width:46px; height:46px; border-radius:50%; background:#1ed760; color:#000; font-size:20px; }
-    .ctrl .pp:hover{ color:#000; background:#3be477; }
+    .ctrl button{
+        width:40px; height:40px; border:none; border-radius:50%;
+        background:var(--bg); color:var(--text); font-size:22px; cursor:pointer;
+        box-shadow:4px 4px 10px var(--sh-dark), -4px -4px 10px var(--sh-light);
+        transition:.15s; display:flex; align-items:center; justify-content:center;
+    }
+    .ctrl button:hover{ color:var(--a1); transform:scale(1.1); }
+    .ctrl .pp{
+        width:46px; height:46px; background:var(--grad); color:#fff; font-size:20px;
+        box-shadow:0 6px 16px var(--glow);
+    }
+    .ctrl .pp:hover{ color:#fff; filter:brightness(1.1); }
 `;
 
 let pipWin = null;
+
+// main page er theme (html.dark) PiP window e sync kore
+function syncPipTheme() {
+    if (!pipWin) return;
+    try {
+        pipWin.document.documentElement.classList.toggle(
+            'dark', document.documentElement.classList.contains('dark')
+        );
+    } catch (e) {}
+}
+// dark/light toggle korle PiP o sathe sathe bodlabe
+new MutationObserver(syncPipTheme).observe(document.documentElement, {
+    attributes: true, attributeFilter: ['class']
+});
 
 function pipEl(id) { return pipWin.document.getElementById(id); }
 
@@ -247,6 +295,7 @@ function updatePipTime() {
     const dur = isFinite(audio.duration) ? audio.duration : 0;
     seek.max = dur;
     seek.value = audio.currentTime;
+    seek.style.setProperty('--pct', (dur ? (audio.currentTime / dur) * 100 : 0) + '%');
     pipEl('pi-cur').textContent = fmt(audio.currentTime);
     pipEl('pi-dur').textContent = fmt(dur);
 }
@@ -271,6 +320,7 @@ async function openPip() {
     const style = d.createElement('style');
     style.textContent = PIP_CSS;
     d.head.appendChild(style);
+    syncPipTheme();
 
     d.body.innerHTML =
         '<div class="pw">' +
@@ -431,8 +481,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 // =====================================================================
-//  THEME TOGGLE (Dark / Light)  -- sudhu EKBAR thakbe
-//  Default = dark. Page load-er flash atkate HTML <head>-e chhoto script ache.
+//  THEME TOGGLE (Light / Dark)  -- sudhu EKBAR thakbe
+//  Default = LIGHT. Dark hole <html class="dark"> hoy.
+//  Saved theme localStorage 'mm-theme2' e thake.
 // =====================================================================
 (function () {
     if (window.__mmThemeInit) return;          // double-run guard
@@ -444,14 +495,20 @@ document.addEventListener('DOMContentLoaded', function () {
     var root   = document.documentElement;
     if (!toggle) return;
 
+    // purono 'light' class (ager version er) thakle sheta muche dao
+    root.classList.remove('light');
+
     function apply(isDark) {
-        root.classList.toggle('light', !isDark);
+        root.classList.toggle('dark', isDark);
         toggle.checked = isDark;
         if (text) text.textContent = isDark ? 'Dark Mode' : 'Light Mode';
-        try { localStorage.setItem('mm-theme', isDark ? 'dark' : 'light'); } catch (e) {}
+        try { localStorage.setItem('mm-theme2', isDark ? 'dark' : 'light'); } catch (e) {}
     }
 
-    apply(!root.classList.contains('light'));
+    // page load: saved theme (na thakle LIGHT)
+    var saved = null;
+    try { saved = localStorage.getItem('mm-theme2'); } catch (e) {}
+    apply(saved === 'dark' || root.classList.contains('dark'));
 
     toggle.addEventListener('change', function () { apply(toggle.checked); });
 
