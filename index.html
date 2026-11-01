@@ -1,666 +1,198 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta name="google-site-verification" content="JNprVgXB2g-R2yHl4FGiJymHKbf5y8RKkURMfJ6qLUA" />
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="CSS/Maity Music login.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-    <link rel="apple-touch-icon" href="images/M-icon-512.png">
-    <link rel="icon" type="image/png" href="images/M-icon-512.png">
-
-    <!-- ===== SEO ===== -->
-    <title>Maity Music - Free Music Website | Listen to Songs Online</title>
-    <meta name="description" content="Maity Music is a free music website to listen to songs online. Spotify-style web music player with dark and light mode, made by Debajyoti Maity.">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
-
-    <!-- Social share tags -->
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Maity Music">
-    <meta property="og:title" content="Maity Music - Free Music Website">
-    <meta property="og:description" content="Listen to songs online on Maity Music, a free web music player.">
-    <meta property="og:url" content="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
-    <meta property="og:image" content="https://debajyoymaity020-tech.github.io/Maity-Music-New/images/M-icon-512.png">
-
-    <!-- Structured data -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      "name": "Maity Music",
-      "alternateName": ["Maity Music Player", "Maity Music Free Music Website"],
-      "url": "https://debajyoymaity020-tech.github.io/Maity-Music-New/"
-    }
-    </script>
-
-    <!-- OTP email pathanor jonno (EmailJS) -->
-    <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js"></script>
-
-    <!-- Shudhu notun CSS (baki shob CSS/Maity Music login.css e ache) -->
-    <style>
-        /* tomar original gradient background + niche scroll korte parbe */
-        body{
-            min-height: 100vh;
-            /* background:
-                radial-gradient(circle at 15% 20%, #043d26 0%, transparent 30%),
-                radial-gradient(circle at 90% 10%, #075a31 0%, transparent 35%),
-                linear-gradient(135deg, #021711, #00100c 60%, #031c14); */
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            overflow: visible;
-            overflow-x: hidden;
-            /* background-color: black; */
-        }
-
-        /* password chokh icon */
-        .eye-btn{
-            background: none;
-            border: none;
-            color: #d7d7d7;
-            cursor: pointer;
-            font-size: 18px;
-            padding: 0;
-            flex-shrink: 0;
-        }
-        .eye-btn:hover{
-            color: #14e878;
-        }
-
-        /* login message (layout nore na) */
-        .mar{
-            position: relative;
-        }
-        .login-msg{
-            position: absolute;
-            left: 8%;
-            bottom: 20px;
-            max-width: 52%;
-            font-size: 13px;
-            line-height: 1.3;
-            color: #ff6b6b;
-        }
-        @media screen and (max-width: 968px) {
-            .login-msg{
-                left: 0;
-                width: 100%;
-                max-width: 100%;
-                bottom: 5px;
-                text-align: center;
-            }
-        }
-
-        /* ===== Desktop size adjust ===== */
-        @media screen and (min-width: 969px) {
-            /* login: Log In button ektu niche, Forget Password jaygay-i thakbe */
-            .leaf .mar{ margin-top: calc(10% + 16px); }
-            .fp{ top: calc(68.4% - 11px); }
-
-            /* sign up panel ektu compact, jate screen e dhore */
-            .under .input{ height: 56px; margin-top: 2.2%; margin-bottom: 12px; }
-            .under .mar-sm{ margin-top: 2%; }
-            .under .dass{ margin-top: 5%; }
-            .under .su{ margin-top: 3%; }
-        }
-
-        /* ===== sweet message animations ===== */
-        @keyframes msgPop {
-            from { opacity: 0; transform: translateY(12px) scale(0.9); }
-            to   { opacity: 1; transform: translateY(0) scale(1); }
-        }
-        @keyframes msgShake {
-            0%, 100% { transform: translateX(0); }
-            20% { transform: translateX(-8px); }
-            40% { transform: translateX(8px); }
-            60% { transform: translateX(-5px); }
-            80% { transform: translateX(5px); }
-        }
-        @keyframes msgGlow {
-            0%, 100% { text-shadow: 0 0 6px rgba(0, 255, 136, 0.4); }
-            50%      { text-shadow: 0 0 16px rgba(0, 255, 136, 0.95); }
-        }
-
-        /* Login page message */
-        .login-msg.error{
-            color: #ff6b6b;
-            animation: msgPop 0.35s ease-out, msgShake 0.5s 0.1s;
-        }
-        .login-msg.success{
-            /* color: #00ff88; */
-            font-weight: bold;
-            animation: msgPop 0.4s ease-out, msgGlow 1.2s ease-in-out infinite;
-        }
-
-        /* Sign up page message */
-        .su-msg.shake{
-            animation: msgPop 0.35s ease-out, msgShake 0.5s 0.1s;
-        }
-        .su-msg.glow{
-            font-weight: bold;
-            animation: msgPop 0.4s ease-out, msgGlow 1.2s ease-in-out infinite;
-        }
-
-        /* jader device e animation kom rakhar setting ache */
-        @media (prefers-reduced-motion: reduce) {
-            .login-msg, .su-msg { animation: none !important; }
-        }
-
-        /* ===== Send OTP button ===== */
-        .otp-btn{
-            background: #00ff88;
-            color: #000;
-            border: none;
-            border-radius: 10px;
-            padding: 8px 12px;
-            font-size: 13px;
-            font-weight: bold;
-            cursor: pointer;
-            white-space: nowrap;
-            flex-shrink: 0;
-        }
-        .otp-btn:hover:not(:disabled){
-            background: #185d60;
-            color: #1ed760;
-        }
-        .otp-btn:disabled{
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-
-        /* ===== SEO text ===== */
-        .seo-hidden{
-            position: absolute;
-            width: 1px;
-            height: 1px;
-            overflow: hidden;
-            clip: rect(0 0 0 0);
-            white-space: nowrap;
-        }
-        .seo-text{
-            max-width: 700px;
-            margin: 20px auto;
-            padding: 0 16px 30px;
-            text-align: center;
-            color: #d7d7d7;
-            font-size: 14px;
-        }
-        .seo-text h2{
-            font-size: 18px;
-            margin-bottom: 6px;
-        }
-    </style>
-</head>
-<body>
-    <h1 class="seo-hidden">Maity Music - Free Music Website</h1>
-
-    <main class="book">
-
-        <!-- Hidden checkbox: Sign Up / Back label gula eta ke tick-untick kore, tai page ulte jay -->
-        <input type="checkbox" id="flip" class="flip-toggle">
-
-                             <!-- PART 1 (LEFT PAGE - login er shomoy dekhay) -->
-        <div class="box1">
-            <div class="logo"> <b s class="white">Maity</b> <sub class="s">♫</sub> <b>Music</b></div>
-            <div class="wb">WELCOME BACK</div>
-            <div class="gd"><span class="green">Glad </span> <span class="green">To</span> <span class="green">See</span> <span class="green">You</span></div>
-            <div class="aga">again !</div>
-            <div class="yf">Your favorite music is just</div>
-            <div class="yf1">a login away.</div>
-            <div class="wave wave1"></div>
-            <div class="wave wave2"></div>
-            <div class="wave wave3"></div>
-            <div class="music-note note1">♫</div>
-            <div class="music-note note2">♪</div>
-            <div class="music-note note3">♬</div>
-            <div class="music-note note4">♫</div>
-            <div class="headphone">
-                🎧
-            </div>
-            <div class="music-star star1">☆ </div>
-            <div class="music-star star2">☆ </div>
-            <div class="music-star star3">☆ </div>
-            <p id="message"></p>
-        </div>
-
-                             <!-- PART 2 (RIGHT SIDE) -->
-        <div class="right">
-
-            <!-- NICHE THAKA PAGE: SIGN UP FORM (page ulte gele eta dekha jabe) -->
-            <div class="under">
-                <div class="top-bar back-bar">
-                    <label for="flip" class="tm back-link">← BACK TO LOGIN</label>
-                </div>
-
-                <div class="lpb">
-                    <div class="logo"> <b class="wh">Maity</b> <sub class="s1">♫</sub> <b class="wh">Music</b></div>
-                    <div class="lis">Create your account to start listening</div>
-
-                    <form action="" id="signup-form">
-                        <div class="input">
-                            <span>👤</span>
-                            <input class="inp" type="text" placeholder="Full Name" id="su-name" autocomplete="name" required>
-                        </div>
-                        <div class="input">
-                            <span>✉</span>
-                            <input class="inp" type="text" placeholder="Gmail or Phone Number" id="su-email" autocomplete="username" required>
-                            <button type="button" class="otp-btn" id="send-otp">Send OTP</button>
-                        </div>
-                        <div class="input">
-                            <span>🔑</span>
-                            <input class="inp" type="text" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP" id="su-otp" autocomplete="one-time-code">
-                        </div>
-                        <div class="input">
-                            <span>🔒</span>
-                            <input class="inp" type="password" placeholder="Create Password" id="su-password" autocomplete="new-password" required>
-                            <button type="button" class="eye-btn" data-target="su-password" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
-                        </div>
-                        <div class="input">
-                            <span>🔒</span>
-                            <input class="inp" type="password" placeholder="Confirm Password" id="su-password2" autocomplete="new-password" required>
-                            <button type="button" class="eye-btn" data-target="su-password2" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
-                        </div>
-                        <div class="su-msg" id="su-msg"></div>
-                        <div class="mar mar-sm"></div>
-                        <button type="submit" class="login signup-btn">Sign Up</button>
-                    </form>
-
-                    <div class="dass"></div>
-                    <div class="su">Already have an account ? <span class="gre"><b><label for="flip" class="ggg">Log In</label></b></span></div>
-                </div>
-            </div>
-
-            <!-- GHURBE JETA: LOGIN PAGE (samne) + er pichone LEFT PAGE (back) -->
-            <div class="leaf">
-
-                <!-- FRONT = tomar ager login panel, ekdom same -->
-                <div class="leaf-front">
-                    <div class="box">
-                        <div class="top-bar">
-                            <span class="tm">LISTEN</span>
-                            <span class="tm1">•</span>
-                            <span class="tm">FEEL</span>
-                            <span class="tm1">•</span>
-                            <span class="tm">BE HAPPY</span>
-                        </div>
-                        <div class="lpb">
-                            <div class="logo"> <b s class="wh">Maity</b> <sub class="s1">♫</sub> <b class="wh">Music</b></div>
-                            <div class="lis">Login to continue your music journey</div>
-                            <div class="ima">
-                                <div class="pho"> <img src="images/ll.webp" alt="Maity Music free music website login"></div>
-                            </div>
-                            <form action="" id="login-form">
-                                <div class="input">
-                                    <span>✉</span>
-                                    <input class="inp" type="text" placeholder="Gmail or Phone Number" id="email" autocomplete="username">
-                                </div>
-                                <div class="input">
-                                    <span>🔒</span>
-                                    <input class="inp" type="password" placeholder="Enter Password" id="password">
-                                    <button type="button" class="eye-btn" data-target="password" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button>
-                                </div>
-                                <!-- error / success message ei .mar er bhitore (layout nore na) -->
-                                <div class="mar"><div class="login-msg" id="login-msg"></div></div>
-                                <a class="login" href="#login" id="login-btn">Log In</a>
-                            </form>
-
-                            <div class="dass"></div>
-                            <a class="fp" href="forget_ps.html">Forget Password !</a>
-                            <div class="social">
-                                <a href="https://accounts.google.com/"><i class="fa-brands fa-google"></i></a>|
-                                <a href="https://account.apple.com"><i class="fa-brands fa-apple"></i></a>|
-                                <a href="https://www.facebook.com/"><i class="fa-brands fa-facebook-f"></i></a>
-                            </div>
-                            <div class="su">Don't have an account ? <span class="gre"><b><label for="flip" class="ggg">Sign Up</label></b></span></div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- BACK = page ulte gele baam dike (left page) ei ta dekha jabe -->
-                <div class="leaf-back">
-                    <div class="logo"> <b>Maity</b> <sub class="s">♫</sub> <b>Music</b></div>
-                    <div class="wb">NEW HERE ?</div>
-                    <div class="gd"><span class="green">Let's</span> <span class="green">Get</span></div>
-                    <div class="aga">started !</div>
-                    <div class="yf">Create your account and your</div>
-                    <div class="yf1">favorite music is yours to keep.</div>
-                    <div class="music-note note1">♫</div>
-                    <div class="music-note note3">♬</div>
-                    <div class="music-note note4">♪</div>
-                    <div class="music-star star1">☆ </div>
-                </div>
-
-            </div>
-        </div>
-    </main>
-
-    <section class="seo-text">
-        <h2>Free online music player</h2>
-        <p>Maity Music is a free music website where you can listen to songs online. It has a Spotify-style player with dark and light mode, made by Debajyoti Maity.</p>
-    </section>
-
+<!DOCTYPE html><html lang="en"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maity Music - Free Online Music Player | Listen to Songs Online</title>
+<meta name="description" content="Maity Music is a free online music player. Listen to Hindi, Bengali and English songs anytime with dark and light mode. Sign up free. Made by Debajyoti Maity.">
+<meta name="keywords" content="Maity Music, free music website, online music player, listen songs online, Hindi songs, Bengali songs, Debajyoti Maity">
+<meta name="author" content="Debajyoti Maity">
+<meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1">
+<meta name="theme-color" content="#8b3dff">
+<meta name="google-site-verification" content="JNprVgXB2g-R2yHl4FGiJymHKbf5y8RKkURMfJ6qLUA">
+<link rel="canonical" href="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
+<link rel="alternate" hreflang="en" href="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
+<link rel="alternate" hreflang="x-default" href="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Maity Music">
+<meta property="og:locale" content="en_IN">
+<meta property="og:title" content="Maity Music - Free Online Music Player">
+<meta property="og:description" content="Listen to your favourite songs online for free on Maity Music. Dark and light mode, simple and fast.">
+<meta property="og:url" content="https://debajyoymaity020-tech.github.io/Maity-Music-New/">
+<meta property="og:image" content="https://debajyoymaity020-tech.github.io/Maity-Music-New/images/M-icon-512.png">
+<meta property="og:image:width" content="512">
+<meta property="og:image:height" content="512">
+<meta property="og:image:alt" content="Maity Music logo">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Maity Music - Free Online Music Player">
+<meta name="twitter:description" content="Listen to your favourite songs online for free on Maity Music.">
+<meta name="twitter:image" content="https://debajyoymaity020-tech.github.io/Maity-Music-New/images/M-icon-512.png">
+<link rel="icon" type="image/png" sizes="512x512" href="images/M-icon-512.png">
+<link rel="apple-touch-icon" href="images/M-icon-512.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
+<link rel="preload" as="image" href="images/ll.webp">
+<link rel="stylesheet" href="CSS/Maity Music login.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://debajyoymaity020-tech.github.io/Maity-Music-New/#website","name":"Maity Music","alternateName":["Maity Music Player","Maity Music Free Music Website"],"url":"https://debajyoymaity020-tech.github.io/Maity-Music-New/","inLanguage":"en","description":"Free online music player to listen to songs online.","author":{"@id":"https://debajyoymaity020-tech.github.io/Maity-Music-New/#author"}},{"@type":"WebApplication","name":"Maity Music","url":"https://debajyoymaity020-tech.github.io/Maity-Music-New/","applicationCategory":"MultimediaApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","image":"https://debajyoymaity020-tech.github.io/Maity-Music-New/images/M-icon-512.png","offers":{"@type":"Offer","price":"0","priceCurrency":"INR"},"author":{"@id":"https://debajyoymaity020-tech.github.io/Maity-Music-New/#author"}},{"@type":"Person","@id":"https://debajyoymaity020-tech.github.io/Maity-Music-New/#author","name":"Debajyoti Maity"}]}</script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4.4.1/dist/email.min.js" defer></script>
+<style>
+body{min-height:100vh;background-repeat:no-repeat;background-attachment:fixed;overflow:visible;overflow-x:hidden}
+.eye-btn{background:none;border:none;color:#d7d7d7;cursor:pointer;font-size:18px;padding:0;flex-shrink:0}
+.eye-btn:hover{color:#14e878}
+.mar{position:relative}
+.login-msg{position:absolute;left:8%;bottom:20px;max-width:52%;font-size:13px;line-height:1.3;color:#ff6b6b}
+@media screen and (max-width:968px){
+.login-msg{left:0;width:100%;max-width:100%;bottom:5px;text-align:center}
+}
+@media screen and (min-width:969px){
+.leaf .mar{margin-top:calc(10% + 16px)}
+.fp{top:calc(68.4% - 11px)}
+.under .input{height:56px;margin-top:2.2%;margin-bottom:12px}
+.under .mar-sm{margin-top:2%}
+.under .dass{margin-top:5%}
+.under .su{margin-top:3%}
+}
+@keyframes msgPop{from{opacity:0;transform:translateY(12px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes msgShake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(5px)}}
+@keyframes msgGlow{0%,100%{text-shadow:0 0 6px rgba(0,255,136,.4)}50%{text-shadow:0 0 16px rgba(0,255,136,.95)}}
+.login-msg.error{color:#ff6b6b;animation:msgPop .35s ease-out,msgShake .5s .1s}
+.login-msg.success{font-weight:700;animation:msgPop .4s ease-out,msgGlow 1.2s ease-in-out infinite}
+.su-msg.shake{animation:msgPop .35s ease-out,msgShake .5s .1s}
+.su-msg.glow{font-weight:700;animation:msgPop .4s ease-out,msgGlow 1.2s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){
+.login-msg,.su-msg{animation:none!important}
+}
+.otp-btn{background:#00ff88;color:#000;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.otp-btn:hover:not(:disabled){background:#185d60;color:#1ed760}
+.otp-btn:disabled{opacity:.6;cursor:not-allowed}
+.seo-text{max-width:700px;margin:20px auto;padding:0 16px 30px;text-align:center;color:#5a5f7d;font-size:14px}
+.seo-text h1{font-size:18px;margin-bottom:6px;color:#1f2340}
+</style>
+</head><body>
+<main class="book">
+<input type="checkbox" id="flip" class="flip-toggle" aria-label="Switch between log in and sign up">
+<div class="box1">
+<div class="logo"><b class="white">Maity</b> <sub class="s">♫</sub> <b>Music</b></div>
+<div class="wb">WELCOME BACK</div>
+<div class="gd"><span class="green">Glad </span> <span class="green">To</span> <span class="green">See</span> <span class="green">You</span></div>
+<div class="aga">again !</div>
+<div class="yf">Your favorite music is just</div>
+<div class="yf1">a login away.</div>
+<div class="wave wave1"></div>
+<div class="wave wave2"></div>
+<div class="wave wave3"></div>
+<div class="music-note note1">♫</div>
+<div class="music-note note2">♪</div>
+<div class="music-note note3">♬</div>
+<div class="music-note note4">♫</div>
+<div class="headphone" role="img" aria-label="Headphones">🎧</div>
+<div class="music-star star1">☆ </div>
+<div class="music-star star2">☆ </div>
+<div class="music-star star3">☆ </div>
+<p id="message"></p></div>
+<div class="right">
+<div class="under">
+<div class="top-bar back-bar"><label for="flip" class="tm back-link">← BACK TO LOGIN</label></div>
+<div class="lpb">
+<div class="logo"><b class="wh">Maity</b> <sub class="s1">♫</sub> <b class="wh">Music</b></div>
+<div class="lis">Create your account to start listening</div>
+<form action="" id="signup-form">
+<div class="input"><span>👤</span>
+<input class="inp" type="text" placeholder="Full Name" id="su-name" autocomplete="name" aria-label="Full name" required></div>
+<div class="input"><span>✉</span>
+<input class="inp" type="text" placeholder="Gmail or Phone Number" id="su-email" autocomplete="username" aria-label="Gmail or phone number" required>
+<button type="button" class="otp-btn" id="send-otp">Send OTP</button></div>
+<div class="input"><span>🔑</span>
+<input class="inp" type="text" inputmode="numeric" maxlength="6" placeholder="Enter 6-digit OTP" id="su-otp" autocomplete="one-time-code" aria-label="6-digit OTP"></div>
+<div class="input"><span>🔒</span>
+<input class="inp" type="password" placeholder="Create Password" id="su-password" autocomplete="new-password" aria-label="Create password" required>
+<button type="button" class="eye-btn" data-target="su-password" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button></div>
+<div class="input"><span>🔒</span>
+<input class="inp" type="password" placeholder="Confirm Password" id="su-password2" autocomplete="new-password" aria-label="Confirm password" required>
+<button type="button" class="eye-btn" data-target="su-password2" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button></div>
+<div class="su-msg" id="su-msg" role="status" aria-live="polite"></div>
+<div class="mar mar-sm"></div>
+<button type="submit" class="login signup-btn">Sign Up</button>
+</form>
+<div class="dass"></div>
+<div class="su">Already have an account ? <span class="gre"><b><label for="flip" class="ggg">Log In</label></b></span></div>
+</div>
+</div>
+<div class="leaf">
+<div class="leaf-front">
+<div class="box">
+<div class="top-bar"><span class="tm">LISTEN</span><span class="tm1">•</span><span class="tm">FEEL</span><span class="tm1">•</span><span class="tm">BE HAPPY</span></div>
+<div class="lpb">
+<div class="logo"><b class="wh">Maity</b> <sub class="s1">♫</sub> <b class="wh">Music</b></div>
+<div class="lis">Login to continue your music journey</div>
+<div class="ima">
+<div class="pho">
+<img src="images/ll.webp" alt="Maity Music free online music player login" width="98" height="98" decoding="async" fetchpriority="high"></div>
+</div>
+<form action="" id="login-form">
+<div class="input"><span>✉</span>
+<input class="inp" type="text" placeholder="Gmail or Phone Number" id="email" autocomplete="username" aria-label="Gmail or phone number"></div>
+<div class="input"><span>🔒</span>
+<input class="inp" type="password" placeholder="Enter Password" id="password" autocomplete="current-password" aria-label="Password">
+<button type="button" class="eye-btn" data-target="password" aria-label="Show or hide password"><i class="fa-solid fa-eye"></i></button></div>
+<div class="mar">
+<div class="login-msg" id="login-msg" role="status" aria-live="polite"></div>
+</div>
+<a class="login" href="#login" id="login-btn" role="button">Log In</a>
+</form>
+<div class="dass"></div>
+<a class="fp" href="forget_ps.html">Forget Password !</a>
+<div class="social">
+<a href="https://accounts.google.com/" rel="noopener nofollow" aria-label="Continue with Google"><i class="fa-brands fa-google"></i></a>|
+<a href="https://account.apple.com" rel="noopener nofollow" aria-label="Continue with Apple"><i class="fa-brands fa-apple"></i></a>|
+<a href="https://www.facebook.com/" rel="noopener nofollow" aria-label="Continue with Facebook"><i class="fa-brands fa-facebook-f"></i></a></div>
+<div class="su">Don't have an account ? <span class="gre"><b><label for="flip" class="ggg">Sign Up</label></b></span></div>
+</div>
+</div>
+</div>
+<div class="leaf-back">
+<div class="logo"><b>Maity</b> <sub class="s">♫</sub> <b>Music</b></div>
+<div class="wb">NEW HERE ?</div>
+<div class="gd"><span class="green">Let's</span> <span class="green">Get</span></div>
+<div class="aga">started !</div>
+<div class="yf">Create your account and your</div>
+<div class="yf1">favorite music is yours to keep.</div>
+<div class="music-note note1">♫</div>
+<div class="music-note note3">♬</div>
+<div class="music-note note4">♪</div>
+<div class="music-star star1">☆ </div>
+</div>
+</div>
+</div>
+</main>
+<section class="seo-text">
+<h1>Maity Music - Free Online Music Player</h1>
+<p>Maity Music is a free music website where you can listen to songs online. It has a Spotify-style player with dark and light mode, made by Debajyoti Maity.</p>
+</section>
 <script>
-    const flip = document.getElementById('flip');
-    const signupForm = document.getElementById('signup-form');
-    const msg = document.getElementById('su-msg');
-    const loginMsg = document.getElementById('login-msg');
-
-    // message dekhanor helper (animation protibar notun kore chole)
-    function showLoginMsg(text, type) {
-        loginMsg.className = 'login-msg';
-        void loginMsg.offsetWidth;            // animation restart korar trick
-        loginMsg.textContent = text;
-        loginMsg.className = 'login-msg ' + type;
-    }
-    function showSignupMsg(text, type) {
-        msg.className = 'su-msg';
-        void msg.offsetWidth;
-        msg.textContent = text;
-        msg.className = 'su-msg ' + (type === 'error' ? 'su-error shake' : 'glow');
-    }
-
-    // users ke localStorage theke pore ney
-    function getUsers() {
-        try { return JSON.parse(localStorage.getItem('maityUsers')) || {}; }
-        catch (err) { return {}; }
-    }
-
-    // chokh icon click korle password dekhabe / lukabe
-    function resetEyes() {
-        document.querySelectorAll('.eye-btn').forEach(function (btn) {
-            document.getElementById(btn.dataset.target).type = 'password';
-            btn.querySelector('i').className = 'fa-solid fa-eye';
-        });
-    }
-    document.querySelectorAll('.eye-btn').forEach(function (btn) {
-        btn.addEventListener('click', function () {
-            const input = document.getElementById(btn.dataset.target);
-            const icon = btn.querySelector('i');
-            if (input.type === 'password') {
-                input.type = 'text';                       // password dekha jabe
-                icon.className = 'fa-solid fa-eye-slash';
-            } else {
-                input.type = 'password';                   // abar dot dot dot
-                icon.className = 'fa-solid fa-eye';
-            }
-        });
-    });
-
-    // ---------- GMAIL ba PHONE (ek-i box e) ----------
-    function isGmail(v) { return /^[a-z0-9._%+-]+@gmail\.com$/i.test(v); }
-
-    // return: { type: 'email' | 'phone', key } ba null (thik na hole)
-    // phone: Indian 10 digit (6-9 diye shuru), age +91 / 91 / 0 thakle-o cholbe
-    function parseId(raw) {
-        const v = (raw || '').trim();
-        if (isGmail(v)) return { type: 'email', key: v.toLowerCase() };
-        const compact = v.replace(/[\s\-()]/g, '');
-        const m = compact.match(/^(?:\+?91|0)?([6-9]\d{9})$/);
-        if (m) return { type: 'phone', key: m[1] };
-        return null;
-    }
-
-    // ---------- OTP SETTINGS ----------
-    // Gmail OTP: EmailJS (emailjs.com) e account khule ei 3ta jinish bosao.
-    // Na bosale DEMO mode: OTP screen e-i dekhabe (email jabe na).
-    const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
-    const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
-    const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-    const DEMO_MODE = EMAILJS_PUBLIC_KEY === 'YOUR_PUBLIC_KEY';
-
-    // Phone OTP: asol SMS pathate SMS service lagbe (paid). Connect korle SMS_ENABLED = true koro
-    // ar niche sendSmsOtp e tomar service er code boshao. Ager por DEMO mode cholbe.
-    const SMS_ENABLED = false;
-    function sendSmsOtp(phone, code) {
-        // Example (tomar nijer server er endpoint):
-        // return fetch('https://tomar-server.com/send-sms', {
-        //     method: 'POST',
-        //     headers: { 'Content-Type': 'application/json' },
-        //     body: JSON.stringify({ phone: '+91' + phone, otp: code })
-        // }).then(function (r) { if (!r.ok) throw new Error('sms failed'); });
-        return Promise.reject(new Error('SMS service not connected'));
-    }
-
-    const OTP_VALID_MS = 5 * 60 * 1000;   // OTP 5 minute valid
-    const RESEND_SECONDS = 30;            // abar pathate 30 second opekkha
-    const MAX_TRIES = 5;                  // 5 bar bhul dile notun OTP lagbe
-
-    if (!DEMO_MODE && typeof emailjs !== 'undefined') {
-        emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY });
-    }
-
-    const sendOtpBtn = document.getElementById('send-otp');
-    const suIdInput = document.getElementById('su-email');
-    const suOtpInput = document.getElementById('su-otp');
-    let otpState = { code: null, id: null, expires: 0, tries: 0 };
-    let resendTimer = null;
-
-    // 6 digit random OTP
-    function makeOtp() {
-        const a = new Uint32Array(1);
-        crypto.getRandomValues(a);
-        return String(a[0] % 1000000).padStart(6, '0');
-    }
-
-    function startResendCountdown() {
-        let left = RESEND_SECONDS;
-        sendOtpBtn.disabled = true;
-        sendOtpBtn.textContent = 'Resend in ' + left + 's';
-        clearInterval(resendTimer);
-        resendTimer = setInterval(function () {
-            left--;
-            if (left <= 0) {
-                clearInterval(resendTimer);
-                sendOtpBtn.disabled = false;
-                sendOtpBtn.textContent = 'Resend OTP';
-            } else {
-                sendOtpBtn.textContent = 'Resend in ' + left + 's';
-            }
-        }, 1000);
-    }
-
-    function resetOtpUI() {
-        clearInterval(resendTimer);
-        sendOtpBtn.disabled = false;
-        sendOtpBtn.textContent = 'Send OTP';
-        otpState = { code: null, id: null, expires: 0, tries: 0 };
-        suOtpInput.value = '';
-    }
-
-    // OTP box e shudhu number
-    suOtpInput.addEventListener('input', function () {
-        suOtpInput.value = suOtpInput.value.replace(/\D/g, '');
-    });
-
-    // Gmail / phone bodlale purono OTP bathil
-    suIdInput.addEventListener('input', function () {
-        if (!otpState.id) return;
-        const p = parseId(suIdInput.value);
-        if (!p || p.key !== otpState.id) resetOtpUI();
-    });
-
-    // ---------- SEND OTP ----------
-    sendOtpBtn.addEventListener('click', function () {
-        const idInfo = parseId(suIdInput.value);
-        const fullName = document.getElementById('su-name').value.trim();
-
-        if (!idInfo) {
-            showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱', 'error');
-            return;
-        }
-        const users = getUsers();
-        if (users[idInfo.key] && typeof users[idInfo.key] === 'object') {
-            showSignupMsg("You're already with us 💚 Please log in.", 'error');
-            return;
-        }
-
-        const code = makeOtp();
-        const where = idInfo.type === 'email' ? idInfo.key : '+91 ' + idInfo.key;
-        sendOtpBtn.disabled = true;
-        sendOtpBtn.textContent = 'Sending...';
-
-        function onSent() {
-            otpState = { code: code, id: idInfo.key, expires: Date.now() + OTP_VALID_MS, tries: 0 };
-            startResendCountdown();
-        }
-        function onFail() {
-            sendOtpBtn.disabled = false;
-            sendOtpBtn.textContent = 'Send OTP';
-            showSignupMsg("Couldn't send OTP 😢 Please try again.", 'error');
-        }
-
-        const demo = idInfo.type === 'email' ? DEMO_MODE : !SMS_ENABLED;
-        if (demo) {
-            onSent();
-            showSignupMsg('DEMO mode: your OTP is ' + code + ' 🔑', 'success');
-            return;
-        }
-
-        let job;
-        if (idInfo.type === 'email') {
-            if (typeof emailjs === 'undefined') { onFail(); return; }
-            job = emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-                to_email: idInfo.key,
-                to_name: fullName || 'Music Lover',
-                otp: code
-            });
-        } else {
-            job = sendSmsOtp(idInfo.key, code);
-        }
-        job.then(function () {
-            onSent();
-            showSignupMsg('OTP sent to ' + where + (idInfo.type === 'email' ? ' 📩 Check inbox or spam.' : ' 📩'), 'success');
-        }, onFail);
-    });
-
-    // ---------- SIGN UP ----------
-    signupForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        const fullName = document.getElementById('su-name').value.trim();
-        const idInfo = parseId(suIdInput.value);
-        const enteredOtp = suOtpInput.value.trim();
-        const p1 = document.getElementById('su-password').value;
-        const p2 = document.getElementById('su-password2').value;
-
-        if (!idInfo) {
-            showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱', 'error');
-            return;
-        }
-        if (!otpState.code || otpState.id !== idInfo.key) {
-            showSignupMsg('Please tap Send OTP first 📩', 'error');
-            return;
-        }
-        if (Date.now() > otpState.expires) {
-            otpState.code = null;
-            showSignupMsg('OTP expired ⏰ Please send a new one.', 'error');
-            return;
-        }
-        if (enteredOtp !== otpState.code) {
-            otpState.tries++;
-            if (otpState.tries >= MAX_TRIES) {
-                otpState.code = null;
-                showSignupMsg('Too many wrong tries 🚫 Please send a new OTP.', 'error');
-            } else {
-                showSignupMsg('Wrong OTP 🔑 Please try again.', 'error');
-            }
-            return;
-        }
-        if (p1 !== p2) {
-            showSignupMsg("Oops! Passwords don't match 🔒 Try again.", 'error');
-            return;
-        }
-
-        const users = getUsers();
-        if (users[idInfo.key] && typeof users[idInfo.key] === 'object') {
-            showSignupMsg("You're already with us 💚 Please log in.", 'error');
-            return;
-        }
-
-        // nam + password dutoi save hocche (key = gmail ba phone number)
-        users[idInfo.key] = { name: fullName, password: p1 };
-        localStorage.setItem('maityUsers', JSON.stringify(users));
-
-        showSignupMsg('Welcome to Maity Music! 🎶 Taking you to login...', 'success');
-        setTimeout(function () {
-            flip.checked = false;
-            signupForm.reset();
-            resetEyes();
-            resetOtpUI();
-            msg.textContent = '';
-            msg.className = 'su-msg';
-        }, 1600);
-    });
-
-    flip.addEventListener('change', function () {
-        if (!flip.checked) { msg.textContent = ''; msg.className = 'su-msg'; }
-        loginMsg.textContent = '';
-    });
-
-    // ---------- LOG IN ----------
-    const loginBtn = document.getElementById('login-btn');
-
-    loginBtn.addEventListener('click', function (e) {
-        e.preventDefault();   // age check hobe, tarpor page jabe
-        loginMsg.textContent = '';
-
-        const rawId = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
-
-        if (!rawId || !password) {
-            showLoginMsg('Please enter Gmail/phone & password 😊', 'error');
-            return;
-        }
-        const idInfo = parseId(rawId);
-        if (!idInfo) {
-            showLoginMsg('Please enter a valid Gmail or phone number 📱', 'error');
-            return;
-        }
-
-        const users = getUsers();
-        const user = users[idInfo.key];
-
-        // register kora ache kina check
-        if (!user) {
-            showLoginMsg('Oops! Not registered yet 🎧 Sign Up first!', 'error');
-            return;
-        }
-        // purono account (shudhu nam save chilo, password chilo na)
-        if (typeof user === 'string') {
-            showLoginMsg('Welcome back 💚 Please Sign Up once again.', 'error');
-            return;
-        }
-        // password mile kina check
-        if (user.password !== password) {
-            showLoginMsg('Oops! Wrong password 🔒 Try again.', 'error');
-            return;
-        }
-
-        // shob thik: shudhu prothom nam rakho (poddhoti bad)
-        let name = (user.name || '').trim().split(' ')[0];
-        if (!name) name = idInfo.type === 'email' ? idInfo.key.split('@')[0] : 'Friend';
-
-        localStorage.setItem('maityCurrentUser', name);
-
-        // sobuj glow message, tarpor dashboard e jabe
-        showLoginMsg('Welcome back, ' + name + '! 🎶', 'success');
-        setTimeout(function () {
-            window.location.href = 'Maity Music.html';
-        }, 1200);
-    });
-
-    // Enter chaple-o login hobe, ar lekhar shomoy message muche jabe
-    ['email', 'password'].forEach(function (id) {
-        document.getElementById(id).addEventListener('keydown', function (e) {
-            if (e.key === 'Enter') loginBtn.click();
-        });
-        document.getElementById(id).addEventListener('input', function () {
-            loginMsg.textContent = '';
-        });
-    });
-</script>
-</body>
-
-</html>
-
-
-
-                                <!-- DEVLOPED BY DEBAJYOTI MMAITY-->
+const flip=document.getElementById('flip'),signupForm=document.getElementById('signup-form'),msg=document.getElementById('su-msg'),loginMsg=document.getElementById('login-msg');
+function showLoginMsg(t,y){loginMsg.className='login-msg';void loginMsg.offsetWidth;loginMsg.textContent=t;loginMsg.className='login-msg '+y}
+function showSignupMsg(t,y){msg.className='su-msg';void msg.offsetWidth;msg.textContent=t;msg.className='su-msg '+(y==='error'?'su-error shake':'glow')}
+function getUsers(){try{return JSON.parse(localStorage.getItem('maityUsers'))||{}}catch(err){return{}}}
+function resetEyes(){document.querySelectorAll('.eye-btn').forEach(function(b){document.getElementById(b.dataset.target).type='password';b.querySelector('i').className='fa-solid fa-eye'})}
+document.querySelectorAll('.eye-btn').forEach(function(b){b.addEventListener('click',function(){const i=document.getElementById(b.dataset.target),c=b.querySelector('i');if(i.type==='password'){i.type='text';c.className='fa-solid fa-eye-slash'}else{i.type='password';c.className='fa-solid fa-eye'}})});
+function isGmail(v){return /^[a-z0-9._%+-]+@gmail\.com$/i.test(v)}
+function parseId(raw){const v=(raw||'').trim();if(isGmail(v))return{type:'email',key:v.toLowerCase()};const c=v.replace(/[\s\-()]/g,''),m=c.match(/^(?:\+?91|0)?([6-9]\d{9})$/);if(m)return{type:'phone',key:m[1]};return null}
+const EMAILJS_PUBLIC_KEY='YOUR_PUBLIC_KEY',EMAILJS_SERVICE_ID='YOUR_SERVICE_ID',EMAILJS_TEMPLATE_ID='YOUR_TEMPLATE_ID',DEMO_MODE=EMAILJS_PUBLIC_KEY==='YOUR_PUBLIC_KEY',SMS_ENABLED=false;
+function sendSmsOtp(phone,code){return Promise.reject(new Error('SMS service not connected'))}
+const OTP_VALID_MS=5*60*1000,RESEND_SECONDS=30,MAX_TRIES=5;
+window.addEventListener('load',function(){if(!DEMO_MODE&&typeof emailjs!=='undefined'){emailjs.init({publicKey:EMAILJS_PUBLIC_KEY})}});
+const sendOtpBtn=document.getElementById('send-otp'),suIdInput=document.getElementById('su-email'),suOtpInput=document.getElementById('su-otp');
+let otpState={code:null,id:null,expires:0,tries:0},resendTimer=null;
+function makeOtp(){const a=new Uint32Array(1);crypto.getRandomValues(a);return String(a[0]%1000000).padStart(6,'0')}
+function startResendCountdown(){let left=RESEND_SECONDS;sendOtpBtn.disabled=true;sendOtpBtn.textContent='Resend in '+left+'s';clearInterval(resendTimer);resendTimer=setInterval(function(){left--;if(left<=0){clearInterval(resendTimer);sendOtpBtn.disabled=false;sendOtpBtn.textContent='Resend OTP'}else{sendOtpBtn.textContent='Resend in '+left+'s'}},1000)}
+function resetOtpUI(){clearInterval(resendTimer);sendOtpBtn.disabled=false;sendOtpBtn.textContent='Send OTP';otpState={code:null,id:null,expires:0,tries:0};suOtpInput.value=''}
+suOtpInput.addEventListener('input',function(){suOtpInput.value=suOtpInput.value.replace(/\D/g,'')});
+suIdInput.addEventListener('input',function(){if(!otpState.id)return;const p=parseId(suIdInput.value);if(!p||p.key!==otpState.id)resetOtpUI()});
+sendOtpBtn.addEventListener('click',function(){const idInfo=parseId(suIdInput.value),fullName=document.getElementById('su-name').value.trim();if(!idInfo){showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱','error');return}const users=getUsers();if(users[idInfo.key]&&typeof users[idInfo.key]==='object'){showSignupMsg("You're already with us 💚 Please log in.",'error');return}const code=makeOtp(),where=idInfo.type==='email'?idInfo.key:'+91 '+idInfo.key;sendOtpBtn.disabled=true;sendOtpBtn.textContent='Sending...';function onSent(){otpState={code:code,id:idInfo.key,expires:Date.now()+OTP_VALID_MS,tries:0};startResendCountdown()}function onFail(){sendOtpBtn.disabled=false;sendOtpBtn.textContent='Send OTP';showSignupMsg("Couldn't send OTP 😢 Please try again.",'error')}const demo=idInfo.type==='email'?DEMO_MODE:!SMS_ENABLED;if(demo){onSent();showSignupMsg('DEMO mode: your OTP is '+code+' 🔑','success');return}let job;if(idInfo.type==='email'){if(typeof emailjs==='undefined'){onFail();return}job=emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{to_email:idInfo.key,to_name:fullName||'Music Lover',otp:code})}else{job=sendSmsOtp(idInfo.key,code)}job.then(function(){onSent();showSignupMsg('OTP sent to '+where+(idInfo.type==='email'?' 📩 Check inbox or spam.':' 📩'),'success')},onFail)});
+signupForm.addEventListener('submit',function(e){e.preventDefault();const fullName=document.getElementById('su-name').value.trim(),idInfo=parseId(suIdInput.value),enteredOtp=suOtpInput.value.trim(),p1=document.getElementById('su-password').value,p2=document.getElementById('su-password2').value;if(!idInfo){showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱','error');return}if(!otpState.code||otpState.id!==idInfo.key){showSignupMsg('Please tap Send OTP first 📩','error');return}if(Date.now()>otpState.expires){otpState.code=null;showSignupMsg('OTP expired ⏰ Please send a new one.','error');return}if(enteredOtp!==otpState.code){otpState.tries++;if(otpState.tries>=MAX_TRIES){otpState.code=null;showSignupMsg('Too many wrong tries 🚫 Please send a new OTP.','error')}else{showSignupMsg('Wrong OTP 🔑 Please try again.','error')}return}if(p1!==p2){showSignupMsg("Oops! Passwords don't match 🔒 Try again.",'error');return}const users=getUsers();if(users[idInfo.key]&&typeof users[idInfo.key]==='object'){showSignupMsg("You're already with us 💚 Please log in.",'error');return}users[idInfo.key]={name:fullName,password:p1};localStorage.setItem('maityUsers',JSON.stringify(users));showSignupMsg('Welcome to Maity Music! 🎶 Taking you to login...','success');setTimeout(function(){flip.checked=false;signupForm.reset();resetEyes();resetOtpUI();msg.textContent='';msg.className='su-msg'},1600)});
+flip.addEventListener('change',function(){if(!flip.checked){msg.textContent='';msg.className='su-msg'}loginMsg.textContent=''});
+const loginBtn=document.getElementById('login-btn');
+loginBtn.addEventListener('click',function(e){e.preventDefault();loginMsg.textContent='';const rawId=document.getElementById('email').value.trim(),password=document.getElementById('password').value;if(!rawId||!password){showLoginMsg('Please enter Gmail/phone & password 😊','error');return}const idInfo=parseId(rawId);if(!idInfo){showLoginMsg('Please enter a valid Gmail or phone number 📱','error');return}const users=getUsers(),user=users[idInfo.key];if(!user){showLoginMsg('Oops! Not registered yet 🎧 Sign Up first!','error');return}if(typeof user==='string'){showLoginMsg('Welcome back 💚 Please Sign Up once again.','error');return}if(user.password!==password){showLoginMsg('Oops! Wrong password 🔒 Try again.','error');return}let name=(user.name||'').trim().split(' ')[0];if(!name)name=idInfo.type==='email'?idInfo.key.split('@')[0]:'Friend';localStorage.setItem('maityCurrentUser',name);showLoginMsg('Welcome back, '+name+'! 🎶','success');setTimeout(function(){window.location.href='Maity Music.html'},1200)});
+['email','password'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')loginBtn.click()});document.getElementById(id).addEventListener('input',function(){loginMsg.textContent=''})});
+</script></body></html>
