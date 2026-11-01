@@ -38,7 +38,7 @@
 <style>
 body{min-height:100vh;background-repeat:no-repeat;background-attachment:fixed;overflow:visible;overflow-x:hidden}
 .eye-btn{background:none;border:none;color:#d7d7d7;cursor:pointer;font-size:18px;padding:0;flex-shrink:0}
-.eye-btn:hover{color:#14e878}
+.eye-btn:hover{color:#111}
 .mar{position:relative}
 .login-msg{position:absolute;left:8%;bottom:20px;max-width:52%;font-size:13px;line-height:1.3;color:#ff6b6b}
 @media screen and (max-width:968px){
@@ -62,13 +62,50 @@ body{min-height:100vh;background-repeat:no-repeat;background-attachment:fixed;ov
 @media (prefers-reduced-motion:reduce){
 .login-msg,.su-msg{animation:none!important}
 }
-.otp-btn{background:#00ff88;color:#000;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
-.otp-btn:hover:not(:disabled){background:#185d60;color:#1ed760}
+.otp-btn{color:white;border:none;border-radius:10px;padding:8px 12px;font-size:13px;font-weight:700;cursor:pointer;white-space:nowrap;flex-shrink:0}
+.otp-btn:hover:not(:disabled){color:wheat}
 .otp-btn:disabled{opacity:.6;cursor:not-allowed}
 .seo-text{max-width:700px;margin:20px auto;padding:0 16px 30px;text-align:center;color:#5a5f7d;font-size:14px}
 .seo-text h1{font-size:18px;margin-bottom:6px;color:#1f2340}
+.loader{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(230,233,242,.94);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);opacity:0;visibility:hidden;transition:opacity .35s ease,visibility 0s .35s}
+.loader.show{opacity:1;visibility:visible;transition:opacity .35s ease}
+.ld-card{display:flex;flex-direction:column;align-items:center;gap:22px;width:min(88vw,340px);padding:34px 28px 30px;border-radius:30px;background:var(--bg);box-shadow:var(--raised);text-align:center;transform:translateY(14px) scale(.96);transition:transform .45s cubic-bezier(.2,.8,.2,1)}
+.loader.show .ld-card{transform:translateY(0) scale(1)}
+.ld-logo{font-size:24px;font-weight:700;color:var(--ink)}
+.ld-logo .s1{font-size:1.5em}
+.ld-ring{position:relative;display:flex;align-items:center;justify-content:center;width:96px;height:96px;margin:6px 0;border-radius:50%;background:var(--bg);box-shadow:var(--raised-sm)}
+.ld-ring::before{content:"";position:absolute;inset:-7px;border-radius:50%;background:conic-gradient(from 0deg,rgba(139,61,255,0),#8b3dff 60%,#3b82f6);-webkit-mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));mask:radial-gradient(farthest-side,transparent calc(100% - 5px),#000 calc(100% - 4px));animation:ldSpin 1s linear infinite}
+.ld-eq{display:flex;align-items:flex-end;gap:4px;height:36px}
+.ld-eq i{display:block;width:5px;height:100%;border-radius:3px;background:linear-gradient(to top,#8b3dff,#3b82f6);transform-origin:bottom;animation:ldBar 1s ease-in-out infinite}
+.ld-eq i:nth-child(2){animation-delay:.15s}
+.ld-eq i:nth-child(3){animation-delay:.3s}
+.ld-eq i:nth-child(4){animation-delay:.45s}
+.ld-eq i:nth-child(5){animation-delay:.6s}
+.ld-text{font-size:15px;font-weight:600;color:var(--ink)}
+.ld-dots i{display:inline-block;font-style:normal;animation:ldDot 1.2s infinite}
+.ld-dots i:nth-child(2){animation-delay:.2s}
+.ld-dots i:nth-child(3){animation-delay:.4s}
+.ld-bar{width:100%;height:6px;border-radius:6px;background:var(--bg);box-shadow:var(--inset);overflow:hidden}
+.ld-bar span{display:block;width:40%;height:100%;border-radius:6px;background:var(--grad);animation:ldSlide 1.3s ease-in-out infinite}
+@keyframes ldSpin{to{transform:rotate(360deg)}}
+@keyframes ldBar{0%,100%{transform:scaleY(.25)}50%{transform:scaleY(1)}}
+@keyframes ldDot{0%,80%,100%{opacity:.2}40%{opacity:1}}
+@keyframes ldSlide{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}
+@media (prefers-reduced-motion:reduce){
+.ld-ring::before,.ld-eq i,.ld-dots i,.ld-bar span{animation-duration:2.4s}
+}
 </style>
 </head><body>
+<div class="loader" id="loader" role="status" aria-live="polite" aria-hidden="true">
+<div class="ld-card">
+<div class="ld-logo"><b class="wh">Maity</b> <sub class="s1">♫</sub> <b class="wh">Music</b></div>
+<div class="ld-ring">
+<div class="ld-eq"><i></i><i></i><i></i><i></i><i></i></div>
+</div>
+<div class="ld-text"><span id="ld-text">Loading</span><span class="ld-dots"><i>.</i><i>.</i><i>.</i></span></div>
+<div class="ld-bar"><span></span></div>
+</div>
+</div>
 <main class="book">
 <input type="checkbox" id="flip" class="flip-toggle" aria-label="Switch between log in and sign up">
 <div class="box1">
@@ -170,6 +207,11 @@ body{min-height:100vh;background-repeat:no-repeat;background-attachment:fixed;ov
 <p>Maity Music is a free music website where you can listen to songs online. It has a Spotify-style player with dark and light mode, made by Debajyoti Maity.</p>
 </section>
 <script>
+const loader=document.getElementById('loader'),ldText=document.getElementById('ld-text');
+function showLoader(t){ldText.textContent=t||'Loading';loader.classList.add('show');loader.setAttribute('aria-hidden','false');document.body.style.overflow='hidden'}
+function hideLoader(){loader.classList.remove('show');loader.setAttribute('aria-hidden','true');document.body.style.overflow=''}
+window.addEventListener('pageshow',function(e){if(e.persisted)hideLoader()});
+document.querySelector('.fp').addEventListener('click',function(e){if(e.ctrlKey||e.metaKey||e.shiftKey||e.button!==0)return;e.preventDefault();const to=this.href;showLoader('Opening password recovery');setTimeout(function(){window.location.href=to},1100)});
 const flip=document.getElementById('flip'),signupForm=document.getElementById('signup-form'),msg=document.getElementById('su-msg'),loginMsg=document.getElementById('login-msg');
 function showLoginMsg(t,y){loginMsg.className='login-msg';void loginMsg.offsetWidth;loginMsg.textContent=t;loginMsg.className='login-msg '+y}
 function showSignupMsg(t,y){msg.className='su-msg';void msg.offsetWidth;msg.textContent=t;msg.className='su-msg '+(y==='error'?'su-error shake':'glow')}
@@ -190,9 +232,9 @@ function resetOtpUI(){clearInterval(resendTimer);sendOtpBtn.disabled=false;sendO
 suOtpInput.addEventListener('input',function(){suOtpInput.value=suOtpInput.value.replace(/\D/g,'')});
 suIdInput.addEventListener('input',function(){if(!otpState.id)return;const p=parseId(suIdInput.value);if(!p||p.key!==otpState.id)resetOtpUI()});
 sendOtpBtn.addEventListener('click',function(){const idInfo=parseId(suIdInput.value),fullName=document.getElementById('su-name').value.trim();if(!idInfo){showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱','error');return}const users=getUsers();if(users[idInfo.key]&&typeof users[idInfo.key]==='object'){showSignupMsg("You're already with us 💚 Please log in.",'error');return}const code=makeOtp(),where=idInfo.type==='email'?idInfo.key:'+91 '+idInfo.key;sendOtpBtn.disabled=true;sendOtpBtn.textContent='Sending...';function onSent(){otpState={code:code,id:idInfo.key,expires:Date.now()+OTP_VALID_MS,tries:0};startResendCountdown()}function onFail(){sendOtpBtn.disabled=false;sendOtpBtn.textContent='Send OTP';showSignupMsg("Couldn't send OTP 😢 Please try again.",'error')}const demo=idInfo.type==='email'?DEMO_MODE:!SMS_ENABLED;if(demo){onSent();showSignupMsg('DEMO mode: your OTP is '+code+' 🔑','success');return}let job;if(idInfo.type==='email'){if(typeof emailjs==='undefined'){onFail();return}job=emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,{to_email:idInfo.key,to_name:fullName||'Music Lover',otp:code})}else{job=sendSmsOtp(idInfo.key,code)}job.then(function(){onSent();showSignupMsg('OTP sent to '+where+(idInfo.type==='email'?' 📩 Check inbox or spam.':' 📩'),'success')},onFail)});
-signupForm.addEventListener('submit',function(e){e.preventDefault();const fullName=document.getElementById('su-name').value.trim(),idInfo=parseId(suIdInput.value),enteredOtp=suOtpInput.value.trim(),p1=document.getElementById('su-password').value,p2=document.getElementById('su-password2').value;if(!idInfo){showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱','error');return}if(!otpState.code||otpState.id!==idInfo.key){showSignupMsg('Please tap Send OTP first 📩','error');return}if(Date.now()>otpState.expires){otpState.code=null;showSignupMsg('OTP expired ⏰ Please send a new one.','error');return}if(enteredOtp!==otpState.code){otpState.tries++;if(otpState.tries>=MAX_TRIES){otpState.code=null;showSignupMsg('Too many wrong tries 🚫 Please send a new OTP.','error')}else{showSignupMsg('Wrong OTP 🔑 Please try again.','error')}return}if(p1!==p2){showSignupMsg("Oops! Passwords don't match 🔒 Try again.",'error');return}const users=getUsers();if(users[idInfo.key]&&typeof users[idInfo.key]==='object'){showSignupMsg("You're already with us 💚 Please log in.",'error');return}users[idInfo.key]={name:fullName,password:p1};localStorage.setItem('maityUsers',JSON.stringify(users));showSignupMsg('Welcome to Maity Music! 🎶 Taking you to login...','success');setTimeout(function(){flip.checked=false;signupForm.reset();resetEyes();resetOtpUI();msg.textContent='';msg.className='su-msg'},1600)});
+signupForm.addEventListener('submit',function(e){e.preventDefault();const fullName=document.getElementById('su-name').value.trim(),idInfo=parseId(suIdInput.value),enteredOtp=suOtpInput.value.trim(),p1=document.getElementById('su-password').value,p2=document.getElementById('su-password2').value;if(!idInfo){showSignupMsg('Please enter a valid Gmail or 10-digit phone number 📱','error');return}if(!otpState.code||otpState.id!==idInfo.key){showSignupMsg('Please tap Send OTP first 📩','error');return}if(Date.now()>otpState.expires){otpState.code=null;showSignupMsg('OTP expired ⏰ Please send a new one.','error');return}if(enteredOtp!==otpState.code){otpState.tries++;if(otpState.tries>=MAX_TRIES){otpState.code=null;showSignupMsg('Too many wrong tries 🚫 Please send a new OTP.','error')}else{showSignupMsg('Wrong OTP 🔑 Please try again.','error')}return}if(p1!==p2){showSignupMsg("Oops! Passwords don't match 🔒 Try again.",'error');return}const users=getUsers();if(users[idInfo.key]&&typeof users[idInfo.key]==='object'){showSignupMsg("You're already with us 💚 Please log in.",'error');return}users[idInfo.key]={name:fullName,password:p1};localStorage.setItem('maityUsers',JSON.stringify(users));showSignupMsg('Welcome to Maity Music! 🎶 Taking you to login...','success');setTimeout(function(){showLoader('Setting up your account')},500);setTimeout(function(){hideLoader();flip.checked=false;signupForm.reset();resetEyes();resetOtpUI();msg.textContent='';msg.className='su-msg'},1900)});
 flip.addEventListener('change',function(){if(!flip.checked){msg.textContent='';msg.className='su-msg'}loginMsg.textContent=''});
 const loginBtn=document.getElementById('login-btn');
-loginBtn.addEventListener('click',function(e){e.preventDefault();loginMsg.textContent='';const rawId=document.getElementById('email').value.trim(),password=document.getElementById('password').value;if(!rawId||!password){showLoginMsg('Please enter Gmail/phone & password 😊','error');return}const idInfo=parseId(rawId);if(!idInfo){showLoginMsg('Please enter a valid Gmail or phone number 📱','error');return}const users=getUsers(),user=users[idInfo.key];if(!user){showLoginMsg('Oops! Not registered yet 🎧 Sign Up first!','error');return}if(typeof user==='string'){showLoginMsg('Welcome back 💚 Please Sign Up once again.','error');return}if(user.password!==password){showLoginMsg('Oops! Wrong password 🔒 Try again.','error');return}let name=(user.name||'').trim().split(' ')[0];if(!name)name=idInfo.type==='email'?idInfo.key.split('@')[0]:'Friend';localStorage.setItem('maityCurrentUser',name);showLoginMsg('Welcome back, '+name+'! 🎶','success');setTimeout(function(){window.location.href='Maity Music.html'},1200)});
+loginBtn.addEventListener('click',function(e){e.preventDefault();loginMsg.textContent='';const rawId=document.getElementById('email').value.trim(),password=document.getElementById('password').value;if(!rawId||!password){showLoginMsg('Please enter Gmail/phone & password 😊','error');return}const idInfo=parseId(rawId);if(!idInfo){showLoginMsg('Please enter a valid Gmail or phone number 📱','error');return}const users=getUsers(),user=users[idInfo.key];if(!user){showLoginMsg('Oops! Not registered yet 🎧 Sign Up first!','error');return}if(typeof user==='string'){showLoginMsg('Welcome back 💚 Please Sign Up once again.','error');return}if(user.password!==password){showLoginMsg('Oops! Wrong password 🔒 Try again.','error');return}let name=(user.name||'').trim().split(' ')[0];if(!name)name=idInfo.type==='email'?idInfo.key.split('@')[0]:'Friend';localStorage.setItem('maityCurrentUser',name);showLoginMsg('Welcome back, '+name+'! 🎶','success');setTimeout(function(){showLoader('Logging you in')},500);setTimeout(function(){window.location.href='Maity Music.html'},1900)});
 ['email','password'].forEach(function(id){document.getElementById(id).addEventListener('keydown',function(e){if(e.key==='Enter')loginBtn.click()});document.getElementById(id).addEventListener('input',function(){loginMsg.textContent=''})});
 </script></body></html>
