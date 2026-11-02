@@ -268,5 +268,5 @@ main{padding-bottom:230px;}}
 .sr.open #site-search{display:block;flex:1;width:auto;min-width:0;height:44px;margin:0;padding:0 14px;font-size:16px;}
 .sr.open .sr-close{display:flex;align-items:center;justify-content:center;width:40px;height:40px;flex-shrink:0;border:1px solid var(--a1);border-radius:50%;background:transparent;color:var(--text);font-size:16px;cursor:pointer;}
 .sr.open .sr-drop{top:calc(100% + 6px);left:12px;right:12px;width:auto;max-width:none;max-height:min(55vh,380px);}}
-.upper-card{ position: absolute; height: 56.9%; width: 71.4%; top: 10.5%;border-radius: 7px; left: 12%; display: flex; align-items: center; justify-content: center;}
+.upper-card{ position: absolute; height: 100%; width: 100%; top: 0%;border-radius: 7px; left: 0; display: flex; align-items: center; justify-content: center;}
 .card:hover .upper-card{display: inline-block;background: rgba(0, 0, 0, 0.20); display: flex; align-items: center;justify-content: center; transition: all ease-out 0.4s;}
