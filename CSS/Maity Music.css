@@ -97,8 +97,8 @@ audio{width:70vh;margin-left:10%;color:var(--text);}
 .aud{margin-left:2%;width:33%;}
 .pre{color:var(--muted);font-size:20px;margin-left:30px;background-color:transparent;border:none;cursor:pointer;border:1px solid var(--muted);padding:8px 10px;border-radius:50%;}
 .post{color:var(--muted);font-size:20px;margin-left:30px;background:transparent;border:1px solid var(--muted);cursor:pointer;padding:8px 10px;border-radius:50%;}
-.ex-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;margin-left:1%;border-radius:50%;flex-shrink:0;display:flex;align-items:center;transition:.2s;font-size:50px;}
-.ex-btn1{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;margin-left:2%;border-radius:50%;flex-shrink:0;display:flex;align-items:center;transition:.2s;font-size:50px;}
+.ex-btn{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;margin-left:0%;border-radius:50%;flex-shrink:0;display:flex;align-items:center;transition:.2s;font-size:50px;}
+.ex-btn1{background:none;border:none;color:var(--muted);cursor:pointer;padding:6px;margin-left:1%;border-radius:50%;flex-shrink:0;display:flex;align-items:center;transition:.2s;font-size:50px;}
 .ex-btn:hover,.ex-btn1:hover{color:var(--a1);transform:scale(1.15);}
 .ex-btn.on{color:var(--a1);filter:drop-shadow(0 0 6px var(--a1));}
 .bit{display:flex;align-items:center;justify-content:space-around;margin-left:4%;}
