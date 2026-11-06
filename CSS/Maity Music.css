@@ -68,7 +68,7 @@ section p{font-size:19px;margin-left:69px;color:rgba(255,255,255,.88);}
 .per{font-size:21px;margin-left:11px;}
 .ed{margin-top:10px;color:var(--muted);margin-left:11px;}
 .a{height:349px;width:100%;}
-.c{height:80%;width:100%;border:1px solid transparent;position:sticky;top:0;left:0;overflow-y:auto;}
+.c{height:80%;width:100%;border:1px solid transparent;position:sticky;top:0;left:0;overflow-y:auto; scrollbar-width: none;}
 .populer{font-size:35px;margin-left:37px;margin-top:1%;margin-bottom:1%;position:sticky;top:0;left:0;}
 .ps{height:auto;width:95%;margin-left:3.1%;margin-top:1.5%;background:var(--bg);box-shadow:var(--raise);border-radius:16px;position:sticky;top:0;left:0;}
 .ps-all1{display:flex;align-items:center;border-top-left-radius:16px;border-top-right-radius:16px;overflow-y:auto;}
